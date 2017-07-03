@@ -16,6 +16,9 @@ public class BWobject : MonoBehaviour {
     [SerializeField]
     protected OwnColor _ownColor;
 
+    [SerializeField]
+    private Material _blackMat, _whiteMat;
+
     private Rigidbody2D _rig;
 
 	// Use this for initialization
@@ -34,10 +37,10 @@ public class BWobject : MonoBehaviour {
         switch(_ownColor)
         {
             case OwnColor.BLACK:
-                gameObject.layer = 8;
+                gameObject.layer = LayerMask.NameToLayer("Black");
                 break;
             case OwnColor.WHITE:
-                gameObject.layer = 9;
+                gameObject.layer = LayerMask.NameToLayer("White");
                 break;
         }
     }
@@ -48,10 +51,10 @@ public class BWobject : MonoBehaviour {
         switch (_ownColor)
         {
             case OwnColor.BLACK:
-                renderer.color = Color.black;
+                renderer.material = _blackMat;
                 break;
             case OwnColor.WHITE:
-                renderer.color = Color.white;
+                renderer.material = _whiteMat;
                 break;
         }
     }

@@ -6,7 +6,7 @@ using UnityEditor;
 public class BoxEditor : Editor
 {
     //グリッドの幅
-    public const float GRID = 1.0f;
+    public const float GRID = 0.85f;
 
     void OnSceneGUI()
     {
@@ -14,23 +14,27 @@ public class BoxEditor : Editor
 
         //グリッドの色
         Color color = Color.cyan * 0.7f;
+        color.a = 0.8f;
 
         //グリッドの中心座標
         Vector3 orig = Vector3.zero;
 
-        const int num = 50;
-        const float size = GRID * num;
+        const int Xnum = 50;
+        const float Xsize = GRID * Xnum;
+
+        const int Ynum = 15;
+        const float Ysize = GRID * Ynum;
 
         //グリッド描画
-        for (int x = -num; x <= num; x++)
+        for (int x = -Xnum; x <= Xnum; x++)
         {
             Vector3 pos = orig + Vector3.right * x * GRID;
-            Debug.DrawLine(pos + Vector3.up * size, pos + Vector3.down * size, color);
+            Debug.DrawLine(pos + Vector3.up * Ysize, pos + Vector3.down * Ysize, color);
         }
-        for (int y = -num; y <= num; y++)
+        for (int y = -Ynum; y <= Ynum; y++)
         {
             Vector3 pos = orig + Vector3.up * y * GRID;
-            Debug.DrawLine(pos + Vector3.left * size, pos + Vector3.right * size, color);
+            Debug.DrawLine(pos + Vector3.left * Xsize, pos + Vector3.right * Xsize, color);
         }
 
         //グリッドの位置にそろえる

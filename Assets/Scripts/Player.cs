@@ -58,22 +58,18 @@ public class Player : MonoBehaviour
 	// 毎フレームの更新処理
 	void Update()
 	{
-		// 一定の高さよりも下にいたら、失敗したことにする
-		if (m_Trans.position.y <= -20.0f)
-		{
-			// とりあえず自分自身を削除
-			Destroy(gameObject);
-			// 失敗したシーンを読み込む
-			SceneManager.LoadScene("Result");
-		}
+		//// 一定の高さよりも下にいたら、失敗したことにする
+		//if (m_Trans.position.y <= -20.0f)
+		//{
+		//	// とりあえず自分自身を削除
+		//	Destroy(gameObject);
+		//	// 失敗したシーンを読み込む
+		//	SceneManager.LoadScene("Result");
+		//}
 
 		// キーの入力を受け取る変数を作成
-		Vector2 InputVec = Vector2.zero;
 		bool jump = false;
 		bool colorChange = false;
-		// キーの入力を受け取る
-		// 左右の入力
-		InputVec.x = Input.GetAxis("Horizontal");
 		// ジャンプキーの入力
 		jump = Input.GetButton("Jump");
 		// 色を変更するキー
@@ -81,14 +77,14 @@ public class Player : MonoBehaviour
 
 		// キーの入力によって、キャラクターを動かす
 		// 左右の入力
-		Move(InputVec);
+		Move(new Vector2(1.0f,0));
 		// ジャンプキー
 		if (jump)
 		{
 			Jump();
 		}
 		// 色の変更
-		if (colorChange)
+		if (colorChange && !CheckFilledWithOtherColor())
 		{
 			OwnColorChange();
 		}
@@ -240,5 +236,48 @@ public class Player : MonoBehaviour
 
 	}
 
+    /// <summary>
+    /// 他の色のコリジョンレイヤーに埋まっているかしているか判定する
+    /// </summary>
+    /// <returns>他の色のコリジョンに埋まっていたらtrue</returns>
+    bool CheckFilledWithOtherColor()
+    {
+        var ownCol = GetComponent<CircleCollider2D>();
 
+        int layerMask = 0;
+
+        switch (m_OwnColor)
+        {
+            case OwnColor.BLACK:
+                layerMask = LayerMask.GetMask(new string[] { "White" });
+                break;
+            case OwnColor.WHITE:
+                layerMask = LayerMask.GetMask(new string[] { "Black" });
+                break;
+        }
+
+
+        var hitCol = Physics2D.OverlapBox(m_Trans.position, new Vector2(ownCol.radius*2.0f,ownCol.radius*2.0f), 0,layerMask);
+
+        if(hitCol)
+        {
+            var hitObject = hitCol.gameObject;
+
+            var acceptLen = ownCol.radius * 2.0f  * 0.75f;
+
+            Debug.Log("acce " + acceptLen);
+
+            var len = (hitObject.GetComponent<Transform>().position - m_Trans.position).magnitude;
+
+            Debug.Log("len " + len);
+
+            if(len < acceptLen)
+            {
+                Debug.Log("Fill");
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
