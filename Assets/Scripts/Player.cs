@@ -101,12 +101,42 @@ public class Player : MonoBehaviour
 	{
 		// 何かに当たったら、ジャンプしているフラグを偽にする
 		m_IsJumping = false;
+
+        //ブロックに横からぶつかった場合ゲームオーバー
+        if(other.gameObject.CompareTag("Block"))
+        {
+            var ownPos = m_Trans.position;
+            Vector2 contactPos;
+            foreach(var contact in other.contacts)
+            {
+                contactPos = contact.point;
+                //自分からコンタクトポイントの方向
+                Vector2 dir = contactPos - (Vector2)ownPos;
+
+                //右ベクトルと自分からのコンタクトポイントの方向の角度が30度以下であったらゲームオーバー
+                if(Vector2.Angle(Vector2.right,dir) < 30.0f)
+                {
+                    //仮にシーンを再読み込み
+                    var scene = SceneManager.GetActiveScene();
+                    SceneManager.LoadScene(scene.name);
+                }
+            }
+        }
 	}
 
-	/// <summary>
-	/// リセット関数　このスクリプトをオブジェクトにアタッチしたときとかに自動的に呼ばれる
-	/// </summary>
-	void Reset()
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("DamageObj"))
+        {
+            var scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.name);
+        }
+    }
+
+    /// <summary>
+    /// リセット関数　このスクリプトをオブジェクトにアタッチしたときとかに自動的に呼ばれる
+    /// </summary>
+    void Reset()
 	{
 		// 描画コンポーネントを取得
 		if (!m_Renderer)
@@ -265,15 +295,10 @@ public class Player : MonoBehaviour
 
             var acceptLen = ownCol.radius * 2.0f  * 0.75f;
 
-            Debug.Log("acce " + acceptLen);
-
             var len = (hitObject.GetComponent<Transform>().position - m_Trans.position).magnitude;
-
-            Debug.Log("len " + len);
 
             if(len < acceptLen)
             {
-                Debug.Log("Fill");
                 return true;
             }
         }
