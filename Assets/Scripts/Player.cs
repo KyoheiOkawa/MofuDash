@@ -40,6 +40,8 @@ public class Player : MonoBehaviour
 	[SerializeField, HideInInspector]
 	Material m_Mat;
 
+    StateMachine<Player> m_StateMachine;
+
 	/// <summary> 現在ジャンプ中かどうかのフラグ </summary>
 	bool m_IsJumping = false;
 
@@ -53,41 +55,15 @@ public class Player : MonoBehaviour
 
 		// テスト：ゲームマネージャのスコアを０に戻す
 		GameManager.Instance.score = 0;
+
+        m_StateMachine = new StateMachine<Player>(this);
+        m_StateMachine.ChangeState(PlayerDefault.Instance());
 	}
 
 	// 毎フレームの更新処理
 	void Update()
 	{
-		//// 一定の高さよりも下にいたら、失敗したことにする
-		//if (m_Trans.position.y <= -20.0f)
-		//{
-		//	// とりあえず自分自身を削除
-		//	Destroy(gameObject);
-		//	// 失敗したシーンを読み込む
-		//	SceneManager.LoadScene("Result");
-		//}
-
-		// キーの入力を受け取る変数を作成
-		bool jump = false;
-		bool colorChange = false;
-		// ジャンプキーの入力
-		jump = Input.GetButton("Jump");
-		// 色を変更するキー
-		colorChange = Input.GetButtonDown("Fire1");
-
-		// キーの入力によって、キャラクターを動かす
-		// 左右の入力
-		Move(new Vector2(1.0f,0));
-		// ジャンプキー
-		if (jump)
-		{
-			Jump();
-		}
-		// 色の変更
-		if (colorChange && !CheckFilledWithOtherColor())
-		{
-			OwnColorChange();
-		}
+        m_StateMachine.Update();
 	}
 
 	//=================================================================================================
@@ -155,20 +131,43 @@ public class Player : MonoBehaviour
 			m_Mat = m_Renderer.sharedMaterial;
 	}
 
+    //=================================================================================================
+    // 自作関数
+    //=================================================================================================
 
+    public void DefaultBehaviour()
+    {
+        // キーの入力を受け取る変数を作成
+        bool jump = false;
+        bool colorChange = false;
+        // ジャンプキーの入力
+        jump = Input.GetButton("Jump");
+        // 色を変更するキー
+        colorChange = Input.GetButtonDown("Fire1");
 
+        // キーの入力によって、キャラクターを動かす
+        // 左右の入力
+        Move(new Vector2(1.0f, 0));
+        // ジャンプキー
+        if (jump)
+        {
+            Jump();
+        }
+        // 色の変更
+        if (colorChange && !CheckFilledWithOtherColor())
+        {
+            OwnColorChange();
+        }
+    }
 
-	//=================================================================================================
-	// 自作関数
-	//=================================================================================================
-	//----------------
-	// private（非公開関数。自分のクラスだけで使う関数）
-	//----------------
+    //----------------
+    // private（非公開関数。自分のクラスだけで使う関数）
+    //----------------
 
-	/// <summary>
-	/// 渡されたベクトルに従い移動する処理
-	/// </summary>
-	void Move(Vector2 InputVec)
+    /// <summary>
+    /// 渡されたベクトルに従い移動する処理
+    /// </summary>
+    void Move(Vector2 InputVec)
 	{
 		// 渡されたベクトルを、移動するベクトルに変換する
 		Vector2 MoveVec = InputVec * m_MoveSpeed;
@@ -304,5 +303,37 @@ public class Player : MonoBehaviour
         }
 
         return false;
+    }
+}
+
+public class PlayerDefault : State<Player>
+{
+    private static PlayerDefault m_Instance;
+
+    private PlayerDefault() { }
+
+    public static PlayerDefault Instance()
+    {
+        if (m_Instance == null)
+            m_Instance = new PlayerDefault();
+
+        return m_Instance;
+    }
+
+    public override void Enter(Player obj)
+    {
+        base.Enter(obj);
+    }
+
+    public override void Execute(Player obj)
+    {
+        base.Execute(obj);
+
+        obj.DefaultBehaviour();
+    }
+
+    public override void Exit(Player obj)
+    {
+        base.Exit(obj);
     }
 }

@@ -4,11 +4,12 @@ Shader "Sprites/Outline"
 {
 	Properties
 	{
+		_Color("Color", Color) = (1,1,1,1)
 		[PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
 	[MaterialToggle] PixelSnap("Pixel snap", Float) = 0
-		_OutLineSpread("Outline Spread", Range(0, 0.1)) = 0
+		_Threshold("Threshold", Range(0.1, 1)) = 0.1
 		_OutLineColor("Outline Color", Color) = (1, 1, 1, 1)
-		_Smoothness("Outline Smoothness", Range(0, 0.5)) = 0.1
+		_Radius("Radius", Range(0.1, 100)) = 10
 	}
 
 		SubShader
@@ -50,21 +51,17 @@ Shader "Sprites/Outline"
 		float2 texcoord : TEXCOORD0;
 	};
 
+	fixed4 _Color;
 	sampler2D _MainTex;
-	half _OutLineSpread;
+	float _Threshold;
 	fixed4 _OutLineColor;
-	fixed _Smoothness;
+	float _Radius;
 
 	v2f vert(appdata IN)
 	{
-		fixed scale = 1 + _OutLineSpread * 2;
-
-		float2 tex = IN.texcoord * scale;
-		tex -= (scale - 1) / 2;
-
 		v2f OUT;
 		OUT.vertex = UnityObjectToClipPos(IN.vertex);
-		OUT.texcoord = tex;
+		OUT.texcoord = IN.texcoord;
 		OUT.color = IN.color;
 #ifdef PIXELSNAP_ON
 		OUT.vertex = UnityPixelSnap(OUT.vertex);
@@ -92,23 +89,26 @@ Shader "Sprites/Outline"
 
 	fixed4 frag(v2f IN) : SV_Target
 	{
-		fixed4 base = SampleSpriteTexture(IN.texcoord) * IN.color;
+		float radius = _Radius;
 
-	fixed4 out_col = _OutLineColor;
-	out_col.a = 1;
-	half2 line_w = half2(_OutLineSpread, 0);
-	fixed4 line_col = SampleSpriteTexture(IN.texcoord + line_w.xy)
-		+ SampleSpriteTexture(IN.texcoord - line_w.xy)
-		+ SampleSpriteTexture(IN.texcoord + line_w.yx)
-		+ SampleSpriteTexture(IN.texcoord - line_w.yx);
-	out_col *= line_col.a;
-	out_col.rgb = _OutLineColor.rgb;
-	out_col = lerp(base, out_col, max(0, sign(_OutLineSpread)));
+	fixed4 accum = float4(0, 0, 0, 0);
+	fixed4 normal = float4(0, 0, 0, 0);
 
-	fixed4 main_col = base;
-	main_col = lerp(main_col, out_col, (1 - main_col.a));
-	main_col.a = IN.color.a * max(0, sign(main_col.a - _Smoothness));
-	return main_col;
+	normal = SampleSpriteTexture(IN.texcoord);
+
+	for (float i = 1.0; i <= radius; i += 1.0f) {
+		accum += SampleSpriteTexture(float2(IN.texcoord.x - 0.01f * i, IN.texcoord.y - 0.01f * i));
+		accum += SampleSpriteTexture(float2(IN.texcoord.x + 0.01f * i, IN.texcoord.y - 0.01f * i));
+		accum += SampleSpriteTexture(float2(IN.texcoord.x + 0.01f * i, IN.texcoord.y + 0.01f * i));
+		accum += SampleSpriteTexture(float2(IN.texcoord.x - 0.01f * i, IN.texcoord.y + 0.01f * i));
+	}
+
+	accum.rgb = _OutLineColor.rgb * _OutLineColor.a * accum.a * 0.95f;
+	float opacity = ((1.0f - normal.a) / radius) * ((_CosTime.w+ 1.0)*.5 / _Threshold);
+
+	normal = (accum * opacity) + (normal * normal.a);
+
+	return normal * _Color;
 	}
 		ENDCG
 	}
