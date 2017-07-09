@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateMachine<T> : ScriptableObject
+public class StateMachine<T> : Object where T : MonoBehaviour
 {
     T m_AttachedGameObject;
 
@@ -39,7 +39,7 @@ public class StateMachine<T> : ScriptableObject
     }
 }
 
-public abstract class State<T> : ScriptableObject
+public abstract class State<T> : ScriptableObject where T : MonoBehaviour
 {
     public virtual void Enter(T obj)
     {

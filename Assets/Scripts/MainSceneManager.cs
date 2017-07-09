@@ -67,7 +67,7 @@ public class StartState : State<MainSceneManager>
         get
         {
             if (m_Instance == null)
-                m_Instance = new StartState();
+                m_Instance = CreateInstance<StartState>();
 
             return m_Instance;
         }
@@ -79,7 +79,7 @@ public class StartState : State<MainSceneManager>
     {
         base.Enter(obj);
 
-        obj.player.stateMachine.ChangeState(PlayerPouse.Instance);
+        obj.player.stateMachine.ChangeState(PlayerPause.Instance);
 
         m_StartImage = Instantiate(Resources.Load<Image>("Prefabs/Start"), obj.canvas.transform);
     }
@@ -100,15 +100,15 @@ public class StartState : State<MainSceneManager>
     }
 }
 
-public class EndState : State<MainSceneManager>
+public class ClearState : State<MainSceneManager>
 {
-    static EndState m_Instance;
-    static public EndState Instance
+    static ClearState m_Instance;
+    static public ClearState Instance
     {
         get
         {
             if (m_Instance == null)
-                m_Instance = new EndState();
+                m_Instance = CreateInstance<ClearState>();
 
             return m_Instance;
         }
@@ -120,7 +120,7 @@ public class EndState : State<MainSceneManager>
     {
         base.Enter(obj);
 
-        obj.player.stateMachine.ChangeState(PlayerPouse.Instance);
+        obj.player.stateMachine.ChangeState(PlayerPause.Instance);
 
         m_ClearImage = Instantiate(Resources.Load<Image>("Prefabs/Clear"), obj.canvas.transform);
     }
@@ -153,7 +153,7 @@ public class PlayingState : State<MainSceneManager>
         get
         {
             if (m_Instance == null)
-                m_Instance = new PlayingState();
+                m_Instance = CreateInstance<PlayingState>();
 
             return m_Instance;
         }

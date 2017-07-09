@@ -28,11 +28,9 @@ public class GoalLine : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         var playerPos = m_PlayerTrans.position;
-        if(playerPos.x > m_OwnTrans.position.x && m_SceneManager.stateMachine.currentState != EndState.Instance)
+        if(playerPos.x > m_OwnTrans.position.x && m_SceneManager.stateMachine.currentState != ClearState.Instance)
         {
-            Debug.Log("Clear!!");
-
-            m_SceneManager.stateMachine.ChangeState(EndState.Instance);
+            m_SceneManager.stateMachine.ChangeState(ClearState.Instance);
         }
 	}
 

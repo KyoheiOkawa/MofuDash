@@ -64,7 +64,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         m_StateMachine = new StateMachine<Player>(this);
-        m_StateMachine.ChangeState(PlayerPouse.Instance);
+        m_StateMachine.ChangeState(PlayerPause.Instance);
     }
 
     // 初期化処理
@@ -343,15 +343,15 @@ public class Player : MonoBehaviour
     }
 }
 
-public class PlayerPouse : State<Player>
+public class PlayerPause : State<Player>
 {
-    private static PlayerPouse m_Instance;
-    public static PlayerPouse Instance
+    private static PlayerPause m_Instance;
+    public static PlayerPause Instance
     {
         get
         {
             if (m_Instance == null)
-                m_Instance = CreateInstance<PlayerPouse>();
+                m_Instance = CreateInstance<PlayerPause>() ;
 
             return m_Instance;
         }
