@@ -45,9 +45,22 @@ public class Player : MonoBehaviour
 	/// <summary> 現在ジャンプ中かどうかのフラグ </summary>
 	bool m_IsJumping = false;
 
+    public StateMachine<Player> stateMachine
+    {
+        get
+        {
+            return m_StateMachine;
+        }
+    }
 
-	// 初期化処理
-	void Start()
+    private void Awake()
+    {
+        m_StateMachine = new StateMachine<Player>(this);
+        m_StateMachine.ChangeState(PlayerDefault.Instance);
+    }
+
+    // 初期化処理
+    void Start()
 	{
 		// 現在の自分の色を黒→白にする
 		m_OwnColor = OwnColor.BLACK;
@@ -55,10 +68,7 @@ public class Player : MonoBehaviour
 
 		// テスト：ゲームマネージャのスコアを０に戻す
 		GameManager.Instance.score = 0;
-
-        m_StateMachine = new StateMachine<Player>(this);
-        m_StateMachine.ChangeState(PlayerDefault.Instance());
-	}
+    }
 
 	// 毎フレームの更新処理
 	void Update()
@@ -306,18 +316,48 @@ public class Player : MonoBehaviour
     }
 }
 
+public class PlayerPouse : State<Player>
+{
+    private static PlayerPouse m_Instance;
+    public static PlayerPouse Instance
+    {
+        get
+        {
+            if (m_Instance == null)
+                m_Instance = new PlayerPouse();
+
+            return m_Instance;
+        }
+    }
+
+    public override void Enter(Player obj)
+    {
+        base.Enter(obj);
+    }
+
+    public override void Execute(Player obj)
+    {
+        base.Execute(obj);
+    }
+
+    public override void Exit(Player obj)
+    {
+        base.Exit(obj);
+    }
+}
+
 public class PlayerDefault : State<Player>
 {
     private static PlayerDefault m_Instance;
-
-    private PlayerDefault() { }
-
-    public static PlayerDefault Instance()
+    public static PlayerDefault Instance
     {
-        if (m_Instance == null)
-            m_Instance = new PlayerDefault();
+        get
+        {
+            if (m_Instance == null)
+                m_Instance = new PlayerDefault();
 
-        return m_Instance;
+            return m_Instance;
+        }
     }
 
     public override void Enter(Player obj)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateMachine<T>
+public class StateMachine<T> : ScriptableObject
 {
     T m_AttachedGameObject;
 
@@ -36,7 +36,7 @@ public class StateMachine<T>
     }
 }
 
-public abstract class State<T>
+public abstract class State<T> : ScriptableObject
 {
     public virtual void Enter(T obj)
     {
