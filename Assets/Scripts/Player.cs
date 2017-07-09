@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -40,6 +41,13 @@ public class Player : MonoBehaviour
 	[SerializeField, HideInInspector]
 	Material m_Mat;
 
+
+    [SerializeField]
+    float m_DeadJumpPower = 250.0f;
+
+    [SerializeField]
+    float m_DeadUnderPosY = -5.0f;//この値より下に落ちたらゲームオーバー
+
     StateMachine<Player> m_StateMachine;
 
 	/// <summary> 現在ジャンプ中かどうかのフラグ </summary>
@@ -56,7 +64,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         m_StateMachine = new StateMachine<Player>(this);
-        m_StateMachine.ChangeState(PlayerDefault.Instance);
+        m_StateMachine.ChangeState(PlayerPouse.Instance);
     }
 
     // 初期化処理
@@ -102,9 +110,7 @@ public class Player : MonoBehaviour
                 //右ベクトルと自分からのコンタクトポイントの方向の角度が30度以下であったらゲームオーバー
                 if(Vector2.Angle(Vector2.right,dir) < 30.0f)
                 {
-                    //仮にシーンを再読み込み
-                    var scene = SceneManager.GetActiveScene();
-                    SceneManager.LoadScene(scene.name);
+                    m_StateMachine.ChangeState(PlayerDead.Instance);
                 }
             }
         }
@@ -114,8 +120,7 @@ public class Player : MonoBehaviour
     {
         if(collision.CompareTag("DamageObj"))
         {
-            var scene = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(scene.name);
+            m_StateMachine.ChangeState(PlayerDead.Instance);
         }
     }
 
@@ -168,6 +173,28 @@ public class Player : MonoBehaviour
         {
             OwnColorChange();
         }
+    }
+
+    /// <summary>
+    /// 落下したか調べる
+    /// </summary>
+    /// <returns>true 落下した場合</returns>
+    public bool IsFall()
+    {
+        if (m_Trans.position.y < m_DeadUnderPosY)
+            return true;
+
+        return false;
+    }
+
+    public void StopMove()
+    {
+        m_Rigid.velocity = Vector2.zero;
+    }
+
+    public void DeadJump()
+    {
+        m_Rigid.AddForce(new Vector2(0, m_DeadJumpPower));
     }
 
     //----------------
@@ -324,7 +351,7 @@ public class PlayerPouse : State<Player>
         get
         {
             if (m_Instance == null)
-                m_Instance = new PlayerPouse();
+                m_Instance = CreateInstance<PlayerPouse>();
 
             return m_Instance;
         }
@@ -354,7 +381,7 @@ public class PlayerDefault : State<Player>
         get
         {
             if (m_Instance == null)
-                m_Instance = new PlayerDefault();
+                m_Instance = CreateInstance<PlayerDefault>();
 
             return m_Instance;
         }
@@ -370,6 +397,52 @@ public class PlayerDefault : State<Player>
         base.Execute(obj);
 
         obj.DefaultBehaviour();
+
+        if (obj.IsFall())
+            obj.stateMachine.ChangeState(PlayerDead.Instance);
+    }
+
+    public override void Exit(Player obj)
+    {
+        base.Exit(obj);
+    }
+}
+
+public class PlayerDead : State<Player>
+{
+    private static PlayerDead m_Instance;
+    public static PlayerDead Instance
+    {
+        get
+        {
+            if (m_Instance == null)
+                m_Instance = CreateInstance<PlayerDead>();
+
+            return m_Instance;
+        }
+    }
+
+    public override void Enter(Player obj)
+    {
+        base.Enter(obj);
+
+        obj.GetComponent<Animator>().speed = 0;//アニメーションをストップ
+        obj.gameObject.layer = LayerMask.NameToLayer("IgnoreCollision");
+
+        obj.StopMove();
+        obj.DeadJump();
+    }
+
+    public override void Execute(Player obj)
+    {
+        base.Execute(obj);
+
+        Action action = () =>
+        {
+            var scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.name);
+        };
+        obj.StartCoroutine(GameManager.Instance.WaitAndAction(1.5f, action));
     }
 
     public override void Exit(Player obj)

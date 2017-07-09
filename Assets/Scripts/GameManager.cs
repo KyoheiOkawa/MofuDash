@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,5 +36,10 @@ public class GameManager {
 	/// <summary> 現在のスコア </summary>
 	public int score { set { m_Score = value; } get { return m_Score; } }
 
+    public IEnumerator WaitAndAction(float waitTime,Action action)
+    {
+        yield return new WaitForSeconds(waitTime);
 
+        action();
+    }
 }
