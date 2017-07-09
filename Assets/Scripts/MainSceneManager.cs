@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MainSceneManager : MonoBehaviour {
     [SerializeField]
     Player m_Player;
 
     [SerializeField]
-    Canvas m_Canvas;
+    GameObject m_Canvas;
 
     StateMachine<MainSceneManager> m_StateMachine;
 
@@ -28,7 +29,7 @@ public class MainSceneManager : MonoBehaviour {
         }
     }
 
-    public Canvas canvas
+    public GameObject canvas
     {
         get
         {
@@ -45,6 +46,15 @@ public class MainSceneManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         m_StateMachine.Update();
+    }
+
+    void Reset()
+    {
+        if (!m_Player)
+            m_Player = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player>();
+
+        if (!m_Canvas)
+            m_Canvas = GameObject.Find("Canvas").gameObject;
     }
 }
 
@@ -86,6 +96,51 @@ public class StartState : State<MainSceneManager>
         base.Exit(obj);
 
         Destroy(m_StartImage.gameObject);
+    }
+}
+
+public class EndState : State<MainSceneManager>
+{
+    static EndState m_Instance;
+    static public EndState Instance
+    {
+        get
+        {
+            if (m_Instance == null)
+                m_Instance = new EndState();
+
+            return m_Instance;
+        }
+    }
+
+    Image m_ClearImage;
+
+    public override void Enter(MainSceneManager obj)
+    {
+        base.Enter(obj);
+
+        obj.player.stateMachine.ChangeState(PlayerPouse.Instance);
+
+        m_ClearImage = Instantiate(Resources.Load<Image>("Prefabs/Clear"), obj.canvas.transform);
+    }
+
+    public override void Execute(MainSceneManager obj)
+    {
+        base.Execute(obj);
+
+        if (m_ClearImage.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
+        {
+
+            var scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.name);
+        }
+    }
+
+    public override void Exit(MainSceneManager obj)
+    {
+        base.Exit(obj);
+
+        Destroy(m_ClearImage.gameObject);
     }
 }
 

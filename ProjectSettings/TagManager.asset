@@ -43,3 +43,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: BackGround
+    uniqueID: 1302949203
+    locked: 0
+  - name: StageObject
+    uniqueID: 3424664915
+    locked: 0
+  - name: Player
+    uniqueID: 722876671
+    locked: 0
+  - name: Front
+    uniqueID: 1128993577
+    locked: 0

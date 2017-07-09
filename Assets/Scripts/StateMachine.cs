@@ -8,14 +8,17 @@ public class StateMachine<T> : ScriptableObject
 
     State<T> m_State = null;
 
+    public State<T> currentState
+    {
+        get
+        {
+            return m_State;
+        }
+    }
+
     public StateMachine(T obj)
     {
         m_AttachedGameObject = obj;
-    }
-
-    public State<T> GetNowState()
-    {
-        return m_State;
     }
 
     public void Update()

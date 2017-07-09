@@ -11,6 +11,9 @@ public class GoalLine : MonoBehaviour {
     [SerializeField]
     GameObject m_Player;
 
+    [SerializeField]
+    MainSceneManager m_SceneManager;
+
     [SerializeField, HideInInspector]
     private Transform m_PlayerTrans;
 
@@ -25,12 +28,11 @@ public class GoalLine : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         var playerPos = m_PlayerTrans.position;
-        if(playerPos.x > m_OwnTrans.position.x)
+        if(playerPos.x > m_OwnTrans.position.x && m_SceneManager.stateMachine.currentState != EndState.Instance)
         {
             Debug.Log("Clear!!");
 
-            var scene = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(scene.name);
+            m_SceneManager.stateMachine.ChangeState(EndState.Instance);
         }
 	}
 
@@ -39,9 +41,17 @@ public class GoalLine : MonoBehaviour {
         if (!m_OwnTrans)
             m_OwnTrans = GetComponent<Transform>();
 
+        if (!m_Player)
+            m_Player = GameObject.FindGameObjectWithTag("Player").gameObject;
+
         if (!m_PlayerTrans)
         {
-            m_PlayerTrans = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Transform>();
+            m_PlayerTrans = m_Player.GetComponent<Transform>();
+        }
+
+        if(!m_SceneManager)
+        {
+            m_SceneManager = GameObject.Find("SceneManager").gameObject.GetComponent<MainSceneManager>();
         }
     }
 
