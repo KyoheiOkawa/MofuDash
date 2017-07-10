@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.CrossPlatformInput;
 
 /// <summary>
 /// プレイヤー。ゲームの操作キャラクター。
@@ -156,9 +157,9 @@ public class Player : MonoBehaviour
         bool jump = false;
         bool colorChange = false;
         // ジャンプキーの入力
-        jump = Input.GetButton("Jump");
+        jump = Input.GetButton("Jump") || CrossPlatformInputManager.GetButtonDown("Jump");
         // 色を変更するキー
-        colorChange = Input.GetButtonDown("Fire1");
+        colorChange = Input.GetButtonDown("Fire1") || CrossPlatformInputManager.GetButtonDown("Fire1");
 
         // キーの入力によって、キャラクターを動かす
         // 左右の入力
