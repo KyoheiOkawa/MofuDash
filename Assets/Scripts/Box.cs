@@ -19,7 +19,7 @@ public class BoxEditor : Editor
         //グリッドの中心座標
         Vector3 orig = Vector3.zero;
 
-        const int Xnum = 50;
+        const int Xnum = 100;
         const float Xsize = GRID * Xnum;
 
         const int Ynum = 15;

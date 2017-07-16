@@ -12,6 +12,9 @@ public class MainSceneManager : MonoBehaviour {
     [SerializeField]
     GameObject m_Canvas;
 
+	[SerializeField]
+	GameObject[] m_Coin = new GameObject[3];
+
     StateMachine<MainSceneManager> m_StateMachine;
 
     public StateMachine<MainSceneManager> stateMachine
