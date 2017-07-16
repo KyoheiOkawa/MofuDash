@@ -432,18 +432,19 @@ public class PlayerDead : State<Player>
 
         obj.StopMove();
         obj.DeadJump();
+
+		Action action = () =>
+		{
+			var panel = Resources.Load<GameObject>("Prefabs/FailedPanel");
+			var canvasTrans = GameObject.Find("Canvas").gameObject.GetComponent<Transform>();
+			Instantiate(panel,canvasTrans);
+		};
+		obj.StartCoroutine(GameManager.Instance.WaitAndAction(1.5f, action));
     }
 
     public override void Execute(Player obj)
     {
         base.Execute(obj);
-
-        Action action = () =>
-        {
-            var scene = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(scene.name);
-        };
-        obj.StartCoroutine(GameManager.Instance.WaitAndAction(1.5f, action));
     }
 
     public override void Exit(Player obj)
