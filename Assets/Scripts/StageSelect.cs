@@ -49,6 +49,16 @@ public class StageSelect : MonoBehaviour {
 		SceneManager.LoadScene (m_TitleSceneName);
 	}
 
+	public void OnStartButton()
+	{
+		string startScene = "Stage" + m_NowSelected.ToString ();
+
+		var titleSound = TitleSound.Instance;
+		titleSound.DestroyOwn ();
+
+		SceneManager.LoadScene (startScene);
+	}
+
 	private void SetStageInfo()
 	{
 		string nextStage = "Stage" + m_NowSelected.ToString ();

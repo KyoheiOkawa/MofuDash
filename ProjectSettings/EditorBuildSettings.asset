@@ -14,3 +14,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Test/PlayerTest.unity
     guid: a10f50d44cd6b9c46a72379e6e519cc5
+  - enabled: 1
+    path: Assets/Scenes/Test/Stage1.unity
+    guid: efddee97cd32943d7b6815f9303adfa5
+  - enabled: 1
+    path: Assets/Scenes/Test/Stage2.unity
+    guid: 31f0deecd80174131a969bf1e29c2c79
+  - enabled: 1
+    path: Assets/Scenes/Test/Stage3.unity
+    guid: 00000000000000000000000000000000

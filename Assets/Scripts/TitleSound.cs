@@ -24,17 +24,19 @@ public class TitleSound : MonoBehaviour {
 
 		DontDestroyOnLoad (this.gameObject);
 	}
-
-	public bool m_IsDestroyOnLoad = false;
-
+		
 	// Use this for initialization
 	void Start () {
-		if (!m_IsDestroyOnLoad)
-			DontDestroyOnLoad (this.gameObject);
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	public void DestroyOwn()
+	{
+		Destroy (this.gameObject);
 	}
 }
