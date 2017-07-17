@@ -13,9 +13,13 @@ public class MainSceneManager : MonoBehaviour {
     GameObject m_Canvas;
 
 	[SerializeField]
-	GameObject[] m_Coin = new GameObject[3];
+	Coin[] m_Coin = new Coin[3];
+
+	bool[] m_IsGetCoin = new bool[3];
 
     StateMachine<MainSceneManager> m_StateMachine;
+
+	int m_Progress = 0;//ステージの進行度（百分率）
 
     public StateMachine<MainSceneManager> stateMachine
     {
@@ -41,10 +45,23 @@ public class MainSceneManager : MonoBehaviour {
         }
     }
 
+	public int progress
+	{
+		get {
+			return m_Progress;
+		}
+		set{
+			m_Progress = value;
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
         m_StateMachine = new StateMachine<MainSceneManager>(this);
         m_StateMachine.ChangeState(StartState.Instance);
+
+		SetCatchedCoin ();
+		UpdateCoinChatcedState ();
     }
 	
 	// Update is called once per frame
@@ -60,6 +77,31 @@ public class MainSceneManager : MonoBehaviour {
         if (!m_Canvas)
             m_Canvas = GameObject.Find("Canvas").gameObject;
     }
+
+	private void SetCatchedCoin()
+	{
+		Scene thisScene = SceneManager.GetActiveScene ();
+		StageInfo thisStageInfo = GameManager.Instance.stageInfo[thisScene.name];
+
+		for (int i = 0; i < m_IsGetCoin.Length; i++) {
+			m_Coin [i].isCatched = thisStageInfo.coin[i];
+		}
+	}
+
+	public void UpdateCoinChatcedState()
+	{
+		for (int i = 0; i < m_Coin.Length; i++) {
+			m_IsGetCoin [i] = m_Coin [i].isCatched;
+		}
+	}
+
+	public bool GetCoinState(int id)
+	{
+		if (0 <= id && id < m_IsGetCoin.Length)
+			return m_IsGetCoin [id];
+
+		return false;
+	}
 }
 
 public class StartState : State<MainSceneManager>
@@ -126,18 +168,28 @@ public class ClearState : State<MainSceneManager>
         obj.player.stateMachine.ChangeState(PlayerPause.Instance);
 
         m_ClearImage = Instantiate(Resources.Load<Image>("Prefabs/Clear"), obj.canvas.transform);
+
+		Action action = () => {
+			Transform canvasTrans = GameObject.Find("Canvas").gameObject.GetComponent<Transform>();
+			ClearPanel panel = Instantiate(Resources.Load("Prefabs/ClearPanel"),canvasTrans) as ClearPanel;
+		};
+
+		GameManager manager = GameManager.Instance;
+		obj.StartCoroutine (manager.WaitAndAction (1.5f, action));
+
+		//ステージ情報のセーブ
+		Scene thisScene = SceneManager.GetActiveScene ();
+		StageInfo thisStageInfo = manager.stageInfo [thisScene.name];
+		thisStageInfo.progress = 100;
+		for (int i = 0; i < 3; i++) {
+			thisStageInfo.coin [i] = obj.GetCoinState (i);
+		}
+		manager.ChangeStageInfo (thisScene.name, thisStageInfo);
     }
 
     public override void Execute(MainSceneManager obj)
     {
         base.Execute(obj);
-
-        if (m_ClearImage.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
-        {
-
-            var scene = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(scene.name);
-        }
     }
 
     public override void Exit(MainSceneManager obj)

@@ -42,11 +42,19 @@ public class GoalLine : MonoBehaviour {
         {
             m_UiManager.progress = 1.0f;
             m_SceneManager.stateMachine.ChangeState(ClearState.Instance);
+
+			m_SceneManager.progress = 100;
         }
+		//プレイ中の処理
         else if(m_SceneManager.stateMachine.currentState == PlayingState.Instance)
         {
+			float progress = 1.0f - (nowDis / m_StartDistance);
+
             //プログレスバーに現在の進行度をセットする
-            m_UiManager.progress = 1.0f - (nowDis / m_StartDistance);
+			m_UiManager.progress = progress;
+
+			//マネージャーに現在の進行度を送信する（百分率で）
+			m_SceneManager.progress = (int)(progress * 100.0f);
         }
 	}
 

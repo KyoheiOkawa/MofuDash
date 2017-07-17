@@ -17,6 +17,8 @@ public class StageSelect : MonoBehaviour {
 	void Start () {
 		GameManager manager = GameManager.Instance;
 		m_StageInfo = manager.stageInfo;
+
+		SetStageInfo ();
 	}
 	
 	// Update is called once per frame

@@ -37,13 +37,6 @@ public class GameManager
 		}
 	}
 
-
-	/// <summary> 現在のスコア </summary>
-	int m_Score;
-
-	/// <summary> 現在のスコア </summary>
-	public int score { set { m_Score = value; } get { return m_Score; } }
-
 	Dictionary<string,StageInfo> m_StageInfo = new Dictionary<string,StageInfo> ();
 
 	public Dictionary<string,StageInfo> stageInfo {
@@ -53,12 +46,32 @@ public class GameManager
 		} 
 	}
 
+	public bool ChangeStageInfo(string stageName,StageInfo writeStageInfo)
+	{
+		ReadStageInfoFromCSV ();
+
+		writeStageInfo.stageName = stageName;
+		if(m_StageInfo.ContainsKey(stageName)){
+			m_StageInfo [stageName] = writeStageInfo;
+
+			WriteStageInfoFromCSV ();
+
+			return true;
+		}
+
+		return false;
+	}
+
 	private void ReadStageInfoFromCSV ()
 	{
 		m_StageInfo.Clear ();
 
 		try {
 			string filePath = Application.streamingAssetsPath + "/CSV/StageInfo.csv";
+#if UNITY_IOS
+			filePath = Application.persistentDataPath + "/" + "StageInfo.csv";
+#endif
+
 			var sr = new System.IO.StreamReader (filePath);
 
 			while (!sr.EndOfStream) {
@@ -82,9 +95,47 @@ public class GameManager
 
 				m_StageInfo.Add (values [0].ToString (), stageInfo);
 			}
+
+			sr.Close();
 		} catch (System.Exception e) {
 			Debug.Log (e.Message);
 		}
+	}
+
+	private void WriteStageInfoFromCSV()
+	{
+		try{
+			string filePath = Application.streamingAssetsPath + "/CSV/StageInfo.csv";
+#if UNITY_IOS
+			filePath = Application.persistentDataPath + "/" + "StageInfo.csv";
+#endif
+
+			var sw = new System.IO.StreamWriter(filePath,false);
+
+			foreach(var info in m_StageInfo){
+				sw.WriteLine(
+					info.Value.stageName+","+
+					info.Value.progress.ToString()+","+
+					ConvertBoolToStringtf(info.Value.coin[0])+","+
+					ConvertBoolToStringtf(info.Value.coin[1])+","+
+					ConvertBoolToStringtf(info.Value.coin[2])+","+
+					info.Value.unlockCoin.ToString()
+				);
+			}
+
+			sw.Close();
+		}
+		catch(System.Exception e){
+			Debug.Log (e.Message);
+		}
+	}
+
+	private string ConvertBoolToStringtf(bool b)
+	{
+		if (b)
+			return "t";
+		else
+			return "f";
 	}
 
 	public IEnumerator WaitAndAction (float waitTime, Action action)

@@ -18,10 +18,10 @@ public class Player : MonoBehaviour
 
 	/// <summary> プレイヤーの移動速度 </summary>
 	[SerializeField]
-	float m_MoveSpeed = 3.0f;
+	float m_MoveSpeed = 4.0f;
 	/// <summary> プレイヤーのジャンプ力 </summary>
 	[SerializeField]
-	float m_JumpPower = 10.0f;
+	float m_JumpPower = 6.0f;
 
 	/// <summary> 現在のプレイヤーの色 </summary>
 	OwnColor m_OwnColor = OwnColor.WHITE;
@@ -42,12 +42,14 @@ public class Player : MonoBehaviour
 	[SerializeField, HideInInspector]
 	Material m_Mat;
 
-
     [SerializeField]
     float m_DeadJumpPower = 250.0f;
 
     [SerializeField]
-    float m_DeadUnderPosY = -5.0f;//この値より下に落ちたらゲームオーバー
+    float m_DeadUnderPosY = -8.0f;//この値より下に落ちたらゲームオーバー
+
+	[SerializeField]
+	MainSceneManager m_SceneManager;
 
     StateMachine<Player> m_StateMachine;
 
@@ -62,6 +64,13 @@ public class Player : MonoBehaviour
         }
     }
 
+	public MainSceneManager sceneManager
+	{
+		get{
+			return m_SceneManager;
+		}
+	}
+
     private void Awake()
     {
         m_StateMachine = new StateMachine<Player>(this);
@@ -75,8 +84,8 @@ public class Player : MonoBehaviour
 		m_OwnColor = OwnColor.BLACK;
 		OwnColorChange();
 
-		// テスト：ゲームマネージャのスコアを０に戻す
-		GameManager.Instance.score = 0;
+		if (!m_SceneManager)
+			m_SceneManager = GameObject.FindObjectOfType<MainSceneManager> ();
     }
 
 	// 毎フレームの更新処理
@@ -435,11 +444,21 @@ public class PlayerDead : State<Player>
 
 		Action action = () =>
 		{
-			var panel = Resources.Load<GameObject>("Prefabs/FailedPanel");
 			var canvasTrans = GameObject.Find("Canvas").gameObject.GetComponent<Transform>();
-			Instantiate(panel,canvasTrans);
+			FailedPanel panel = Instantiate(Resources.Load("Prefabs/FailedPanel"),canvasTrans) as FailedPanel;
 		};
 		obj.StartCoroutine(GameManager.Instance.WaitAndAction(1.5f, action));
+
+		//ステージ情報のセーブ
+		//進行状況が前の結果よりよかったらセーブする
+		GameManager manager = GameManager.Instance;
+		int nowProgress = obj.sceneManager.progress;
+		Scene thisScene = SceneManager.GetActiveScene ();
+		StageInfo thisStageInfo = manager.stageInfo [thisScene.name];
+		if (thisStageInfo.progress < nowProgress) {
+			thisStageInfo.progress = nowProgress;
+			manager.ChangeStageInfo (thisScene.name, thisStageInfo);
+		}
     }
 
     public override void Execute(Player obj)

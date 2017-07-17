@@ -4,23 +4,35 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class FailedPanel : MonoBehaviour {
+public class ClearPanel : MonoBehaviour {
+	[SerializeField]
+	Image[] m_Coins = new Image[3];
+	[SerializeField]
+	Sprite m_CoinSprite;
+
 	[SerializeField]
 	string m_StageSelectSceneName = "StageSelectTest";
-	[SerializeField]
-	Text m_ProgressText;
 
 	MainSceneManager m_SceneManager;
 
 	// Use this for initialization
 	void Start () {
 		m_SceneManager = GameObject.FindObjectOfType<MainSceneManager> ();
-		m_ProgressText.text = m_SceneManager.progress + "%";
+
+		for (int i = 0; i < m_Coins.Length; i++) {
+			if (m_SceneManager.GetCoinState (i))
+				m_Coins [i].sprite = m_CoinSprite;
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	public void OnBackButton()
+	{
+		SceneManager.LoadScene (m_StageSelectSceneName);
 	}
 
 	public void OnRetryButton()
@@ -29,8 +41,8 @@ public class FailedPanel : MonoBehaviour {
 		SceneManager.LoadScene (scene.name);
 	}
 
-	public void OnBackButton()
+	public void OnNextButton()
 	{
-		SceneManager.LoadScene (m_StageSelectSceneName);
+
 	}
 }
