@@ -26,6 +26,19 @@ public class Player : MonoBehaviour
 	/// <summary> 現在のプレイヤーの色 </summary>
 	OwnColor m_OwnColor = OwnColor.WHITE;
 
+	/// <summary>ジャンプ押されたかどうか </summary>
+	bool m_Jump = false;
+	/// <summary>色変更ボタンが押されたかどうか</summary>
+	bool m_ChangeColor = false;
+
+	/// <summary>現在何段階目のジャンプかをカウントする</summary>
+	[SerializeField]
+	int m_JumpCount = 0;
+
+	/// <summary>何段ジャンプまでできるか</summary>
+	[SerializeField]
+	int m_JumpStep = 2;
+
 	/// <summary> キャラクターの描画コンポーネント </summary>
 	[SerializeField, HideInInspector]
 	SpriteRenderer m_Renderer;
@@ -52,9 +65,6 @@ public class Player : MonoBehaviour
 	MainSceneManager m_SceneManager;
 
     StateMachine<Player> m_StateMachine;
-
-	/// <summary> 現在ジャンプ中かどうかのフラグ </summary>
-	bool m_IsJumping = false;
 
     public StateMachine<Player> stateMachine
     {
@@ -91,7 +101,17 @@ public class Player : MonoBehaviour
 	// 毎フレームの更新処理
 	void Update()
 	{
+		//入力情報の取得
+		m_Jump = Input.GetButtonDown("Jump") || CrossPlatformInputManager.GetButtonDown("Jump");
+		m_ChangeColor = Input.GetButtonDown("Fire1") || CrossPlatformInputManager.GetButtonDown("Fire1");
+
+
         m_StateMachine.Update();
+	}
+
+	void FixedUpdate()
+	{
+		m_StateMachine.FixedUpdate ();
 	}
 
 	//=================================================================================================
@@ -103,8 +123,7 @@ public class Player : MonoBehaviour
 	/// <param name="col"> 当たった相手 </param>
 	void OnCollisionEnter2D(Collision2D other)
 	{
-		// 何かに当たったら、ジャンプしているフラグを偽にする
-		m_IsJumping = false;
+		m_JumpCount = 0;
 
         //ブロックに横からぶつかった場合ゲームオーバー
         if(other.gameObject.CompareTag("Block"))
@@ -160,30 +179,27 @@ public class Player : MonoBehaviour
     // 自作関数
     //=================================================================================================
 
+	/// <summary>
+	/// デフォルトの行動（Updateで使用）
+	/// </summary>
     public void DefaultBehaviour()
     {
-        // キーの入力を受け取る変数を作成
-        bool jump = false;
-        bool colorChange = false;
-        // ジャンプキーの入力
-        jump = Input.GetButton("Jump") || CrossPlatformInputManager.GetButtonDown("Jump");
-        // 色を変更するキー
-        colorChange = Input.GetButtonDown("Fire1") || CrossPlatformInputManager.GetButtonDown("Fire1");
-
-        // キーの入力によって、キャラクターを動かす
-        // 左右の入力
-        Move(new Vector2(1.0f, 0));
-        // ジャンプキー
-        if (jump)
-        {
-            Jump();
-        }
         // 色の変更
-        if (colorChange && !CheckFilledWithOtherColor())
+		if (m_ChangeColor && !CheckFilledWithOtherColor())
         {
             OwnColorChange();
         }
     }
+
+	/// <summary>
+	/// デフォルトの行動（FixedUpdateで使用）
+	/// </summary>
+	public void FixedDefaultBehaviour()
+	{
+		Move (new Vector2 (1.0f, 0));
+		if (m_Jump)
+			Jump ();
+	}
 
     /// <summary>
     /// 落下したか調べる
@@ -252,27 +268,17 @@ public class Player : MonoBehaviour
 	void Jump()
 	{
 		// 現在ジャンプ中なら、処理を行わない
-		if (m_IsJumping)
+		if (m_JumpCount >= m_JumpStep)
 		{
 			return;
 		}
 
-		// ここまで来るとジャンプ可能なので、ジャンプ処理を行う
-		// ジャンプ中のフラグを真にする
-		m_IsJumping = true;
+		m_JumpCount++;
 
 		// アニメーション管理コンポーネントのパラメータを更新する
 		m_Animator.SetTrigger("Jump");
 
-		// 現在のリジッドボディの移動ベクトルを取得
-		Vector2 moveVel = m_Rigid.velocity;
-		// 移動ベクトルのＹ軸速度をジャンプする力に変換
-		moveVel.y = m_JumpPower;
-
-		// 現在のリジッドボディの移動ベクトルを更新
-		m_Rigid.velocity = moveVel;
-
-
+		m_Rigid.AddForce (Vector2.up * m_JumpPower);
 	}
 
 	/// <summary>
@@ -411,6 +417,13 @@ public class PlayerDefault : State<Player>
         if (obj.IsFall())
             obj.stateMachine.ChangeState(PlayerDead.Instance);
     }
+
+	public override void FixedExecute (Player obj)
+	{
+		base.FixedExecute (obj);
+
+		obj.FixedDefaultBehaviour ();
+	}
 
     public override void Exit(Player obj)
     {

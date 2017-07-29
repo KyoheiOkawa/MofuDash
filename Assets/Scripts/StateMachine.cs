@@ -29,6 +29,14 @@ public class StateMachine<T> : Object where T : MonoBehaviour
         }
     }
 
+	public void FixedUpdate()
+	{
+		if (m_State != null)
+		{
+			m_State.FixedExecute (m_AttachedGameObject);
+		}
+	}
+
     public void ChangeState(State<T> state)
     {
         if(m_State != null)
@@ -50,6 +58,11 @@ public abstract class State<T> : ScriptableObject where T : MonoBehaviour
     {
 
     }
+
+	public virtual void FixedExecute(T obj)
+	{
+
+	}
 
     public virtual void Exit(T obj)
     {
