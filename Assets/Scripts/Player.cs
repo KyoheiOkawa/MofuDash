@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityStandardAssets.CrossPlatformInput;
+using UnityEngine.UI;
 
 /// <summary>
 /// プレイヤー。ゲームの操作キャラクター。
@@ -32,12 +33,14 @@ public class Player : MonoBehaviour
 	bool m_ChangeColor = false;
 
 	/// <summary>現在何段階目のジャンプかをカウントする</summary>
-	[SerializeField]
 	int m_JumpCount = 0;
 
 	/// <summary>何段ジャンプまでできるか</summary>
 	[SerializeField]
 	int m_JumpStep = 2;
+
+	/// <summary>次の固定アップデートでジャンプするかどうか</summary>
+	bool m_IsNextJump = false;
 
 	/// <summary> キャラクターの描画コンポーネント </summary>
 	[SerializeField, HideInInspector]
@@ -104,7 +107,6 @@ public class Player : MonoBehaviour
 		//入力情報の取得
 		m_Jump = Input.GetButtonDown("Jump") || CrossPlatformInputManager.GetButtonDown("Jump");
 		m_ChangeColor = Input.GetButtonDown("Fire1") || CrossPlatformInputManager.GetButtonDown("Fire1");
-
 
         m_StateMachine.Update();
 	}
@@ -189,6 +191,10 @@ public class Player : MonoBehaviour
         {
             OwnColorChange();
         }
+
+		if (m_Jump) {
+			m_IsNextJump = true;
+		}
     }
 
 	/// <summary>
@@ -197,7 +203,7 @@ public class Player : MonoBehaviour
 	public void FixedDefaultBehaviour()
 	{
 		Move (new Vector2 (1.0f, 0));
-		if (m_Jump)
+		if (m_IsNextJump)
 			Jump ();
 	}
 
@@ -233,33 +239,16 @@ public class Player : MonoBehaviour
     void Move(Vector2 InputVec)
 	{
 		// 渡されたベクトルを、移動するベクトルに変換する
-		Vector2 MoveVec = InputVec * m_MoveSpeed;
+		Vector2 moveVec = InputVec * m_MoveSpeed;
 
-		// 自分のリジッドボディの移動速度を、渡された移動速度に近づける
-		// １．現在の移動速度を取得
-		Vector2 moveVel = m_Rigid.velocity;
-		// ２．渡された移動速度のうち、Ｙ軸の速度は現在の速度に合わせる（自由落下を適用するため）
-		MoveVec.y = moveVel.y;
-		// ３．現在の移動速度を渡された移動速度に近づけていく
-		m_Rigid.velocity = Vector2.Lerp(m_Rigid.velocity, MoveVec, 0.5f);
+		Vector2 nowVelocity = m_Rigid.velocity;
+
+		moveVec.y = nowVelocity.y;
+
+		m_Rigid.velocity = moveVec;
 
 		// 入力されたキーの移動速度情報を、アニメーション管理コンポーネントに渡す（横方向の移動速度）
-		m_Animator.SetFloat("AbsXSpeed", Mathf.Abs(MoveVec.x));
-
-		// 移動ベクトルが遅ければ待機する
-		if (InputVec.sqrMagnitude < 0.1f * 0.1f)
-		{
-			// 待機（なにもしない）
-			return;
-		}
-
-		// 現在の移動ベクトルによって、左右の向きを決める（基本は左向き）
-		// 移動ベクトルが左方向なら、左を向く
-		if (m_Rigid.velocity.x < 0.0f)
-			m_Renderer.flipX = false;
-		// 移動ベクトルが右向きなら、右を向く
-		else
-			m_Renderer.flipX = true;
+		m_Animator.SetFloat("AbsXSpeed", Mathf.Abs(moveVec.x));
 	}
 
 	/// <summary>
@@ -273,12 +262,19 @@ public class Player : MonoBehaviour
 			return;
 		}
 
-		m_JumpCount++;
-
 		// アニメーション管理コンポーネントのパラメータを更新する
 		m_Animator.SetTrigger("Jump");
 
-		m_Rigid.AddForce (Vector2.up * m_JumpPower);
+		Vector2 newVelocity = m_Rigid.velocity;
+		newVelocity.y = m_JumpPower;
+		if (m_JumpCount >= 1) {
+			newVelocity.y += m_JumpPower * 0.2f;
+		}
+		m_Rigid.velocity = newVelocity;
+
+		m_JumpCount++;
+
+		m_IsNextJump = false;
 	}
 
 	/// <summary>
