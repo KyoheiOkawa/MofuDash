@@ -19,10 +19,10 @@ public class Player : MonoBehaviour
 
 	/// <summary> プレイヤーの移動速度 </summary>
 	[SerializeField]
-	float m_MoveSpeed = 4.0f;
+	float m_MoveSpeed = 5.0f;
 	/// <summary> プレイヤーのジャンプ力 </summary>
 	[SerializeField]
-	float m_JumpPower = 6.0f;
+	float m_JumpPower = 7.0f;
 
 	/// <summary> 現在のプレイヤーの色 </summary>
 	OwnColor m_OwnColor = OwnColor.WHITE;

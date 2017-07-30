@@ -57,6 +57,8 @@ public class MainSceneManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		Application.targetFrameRate = 60;
+
         m_StateMachine = new StateMachine<MainSceneManager>(this);
         m_StateMachine.ChangeState(StartState.Instance);
 
