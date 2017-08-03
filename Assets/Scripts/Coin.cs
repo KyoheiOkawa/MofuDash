@@ -8,6 +8,9 @@ public class Coin : MonoBehaviour {
 	[SerializeField]
 	MainSceneManager m_SceneManager;
 
+	[SerializeField,HideInInspector]
+	Animator m_Anim;
+
 	public bool isCatched
 	{
 		get{
@@ -36,6 +39,8 @@ public class Coin : MonoBehaviour {
 	void Reset(){
 		if (!m_SceneManager)
 			m_SceneManager = GameObject.FindObjectOfType<MainSceneManager> ();
+		if (!m_Anim)
+			m_Anim = GetComponent<Animator> ();
 	}
 
 	private void OnTriggerEnter2D(Collider2D collision)
@@ -46,7 +51,8 @@ public class Coin : MonoBehaviour {
 
 			m_SceneManager.UpdateCoinChatcedState ();
 
-			GetComponent<SpriteRenderer> ().color = new Color (1, 1, 1, 0);
+			//GetComponent<SpriteRenderer> ().color = new Color (1, 1, 1, 0);
+			m_Anim.SetTrigger("Get");
 		}
 	}
 }
