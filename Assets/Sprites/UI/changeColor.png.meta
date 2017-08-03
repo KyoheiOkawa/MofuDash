@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 799047887dfddaf42995edad7e775573
-timeCreated: 1499086764
+guid: 38e845cca0f3d4464b5199397f099862
+timeCreated: 1501761485
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -92,7 +92,7 @@ TextureImporter:
     sprites: []
     outline: []
     physicsShape: []
-  spritePackingTag: Mofu
+  spritePackingTag: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 

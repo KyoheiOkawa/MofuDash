@@ -125,8 +125,6 @@ public class Player : MonoBehaviour
 	/// <param name="col"> 当たった相手 </param>
 	void OnCollisionEnter2D(Collision2D other)
 	{
-		m_JumpCount = 0;
-
         //ブロックに横からぶつかった場合ゲームオーバー
         if(other.gameObject.CompareTag("Block"))
         {
@@ -138,9 +136,17 @@ public class Player : MonoBehaviour
                 //自分からコンタクトポイントの方向
                 Vector2 dir = contactPos - (Vector2)ownPos;
 
+				//足元での衝突でった場合、ジャンプのカウント数をリセット
+				if(Vector2.Angle(Vector2.down,dir) < 30.0f)
+					m_JumpCount = 0;
+
                 //右ベクトルと自分からのコンタクトポイントの方向の角度が30度以下であったらゲームオーバー
                 if(Vector2.Angle(Vector2.right,dir) < 30.0f)
                 {
+					//エフェクトを追加
+					Instantiate (Resources.Load ("Prefabs/DeadEffect")as GameObject,
+						contactPos, Quaternion.identity);
+					
                     m_StateMachine.ChangeState(PlayerDead.Instance);
                 }
             }
@@ -372,6 +378,9 @@ public class PlayerPause : State<Player>
     public override void Enter(Player obj)
     {
         base.Enter(obj);
+
+		obj.GetComponent<Rigidbody2D> ().velocity = Vector2.zero;
+		obj.GetComponent<Animator>().SetFloat("AbsXSpeed", 0.0f);
     }
 
     public override void Execute(Player obj)

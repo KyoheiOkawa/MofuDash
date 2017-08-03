@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 799047887dfddaf42995edad7e775573
-timeCreated: 1499086764
+guid: 24cbf955a53244dd5985ec1627c85e51
+timeCreated: 1501760132
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -30,8 +30,8 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
+    filterMode: 1
+    aniso: 16
     mipBias: -1
     wrapU: 1
     wrapV: 1
@@ -92,7 +92,7 @@ TextureImporter:
     sprites: []
     outline: []
     physicsShape: []
-  spritePackingTag: Mofu
+  spritePackingTag: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 
