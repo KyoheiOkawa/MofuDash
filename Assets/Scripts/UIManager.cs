@@ -28,4 +28,10 @@ public class UIManager : MonoBehaviour {
 	void Update () {
 		
 	}
+
+	public void OnPauseButton()
+	{
+		Time.timeScale = 0.0f;
+		Instantiate (Resources.Load ("Prefabs/PausePanel") as GameObject, GetComponent<Transform> ());
+	}
 }

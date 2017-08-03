@@ -37,6 +37,13 @@ public class GameManager
 		}
 	}
 
+	static string m_StageSelectSceneName = "StageSelectTest";
+
+	public string stageSelectSceneName
+	{
+		get{ return m_StageSelectSceneName; }
+	}
+
 	Dictionary<string,StageInfo> m_StageInfo = new Dictionary<string,StageInfo> ();
 
 	public Dictionary<string,StageInfo> stageInfo {
