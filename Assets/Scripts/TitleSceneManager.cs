@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class TitleSceneManager : MonoBehaviour {
-    [SerializeField]
-    string m_TestNextScene = "PlayerTest";//テスト用のシーン遷移先
 
 	// Use this for initialization
 	void Start () {
@@ -27,6 +25,10 @@ public class TitleSceneManager : MonoBehaviour {
 
     public void OnStartButton()
     {
-        SceneManager.LoadScene(m_TestNextScene);
+		var manager = GameManager.Instance;
+		string nextName = manager.stageSelectSceneName;
+
+		var fadeManager = FadeManager.Instance;
+		fadeManager.WhiteOutTransition (1.0f, nextName);
     }
 }
