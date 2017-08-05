@@ -5,9 +5,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class FadeManager : Graphic {
+public class FadeManager : Graphic
+{
 	[SerializeField,Range(0,1)]
 	float m_Range = 0;
+
+	[SerializeField]
+	Texture m_MaskTex = null;
+
+	[SerializeField]
+	Texture m_MainTex = null;
 
 	static FadeManager m_Instance;
 
@@ -30,6 +37,13 @@ public class FadeManager : Graphic {
 		}
 	}
 
+	public override Texture mainTexture {
+		get 
+		{
+			return m_MainTex;
+		}
+	}
+
 	void Awake()
 	{
 		if (this != Instance) {
@@ -42,7 +56,7 @@ public class FadeManager : Graphic {
 
 	// Use this for initialization
 	void Start () {
-		
+		UpdateUniform ();
 	}
 	
 	// Update is called once per frame
@@ -50,7 +64,39 @@ public class FadeManager : Graphic {
 
 	}
 
-	public void WhiteOutTransition(float time, string transSceneName)
+	protected override void OnPopulateMesh( VertexHelper vh )
+	{
+		vh.Clear();
+
+		var rTrans = GetComponent<RectTransform> ();
+
+		// 左上
+		UIVertex lt = UIVertex.simpleVert;
+		lt.position = new Vector3( rTrans.rect.x, rTrans.rect.yMax, 0 );
+		lt.uv0 = new Vector2(0, 1);
+
+		// 右上
+		UIVertex rt = UIVertex.simpleVert;
+		rt.position = new Vector3(rTrans.rect.xMax, rTrans.rect.yMax, 0);
+		rt.uv0 = new Vector2 (1, 1);
+
+		// 右下
+		UIVertex rb = UIVertex.simpleVert;
+		rb.position = new Vector3( rTrans.rect.xMax, rTrans.rect.y, 0 );
+		rb.uv0 = new Vector2 (1, 0);
+
+		// 左下
+		UIVertex lb = UIVertex.simpleVert;
+		lb.position = new Vector3( rTrans.rect.x, rTrans.rect.y, 0 );
+		lb.uv0 = new Vector2 (0, 0);
+
+
+		vh.AddUIVertexQuad( new UIVertex[] {
+			lb, rb, rt, lt
+		} );
+	}
+
+	public void Transition(float time, string transSceneName)
 	{
 		StartCoroutine (FadeWithSceneChange (time, transSceneName));
 	}
@@ -70,7 +116,7 @@ public class FadeManager : Graphic {
 				while (async.progress <= 0.9f)
 					yield return null;
 
-				yield return new WaitForEndOfFrame ();
+				yield return new WaitForSeconds(0.1f);
 
 				SetRayCastBlock (false);
 
@@ -110,7 +156,10 @@ public class FadeManager : Graphic {
 
 	public void UpdateUniform()
 	{
+		material.SetTexture ("_MainTex", m_MainTex);
+		material.SetTexture ("_MaskTex", m_MaskTex);
 		material.SetFloat ("_Fade", m_Range);
+		material.SetColor ("_Color", color);
 	}
 
 	#if UNITY_EDITOR

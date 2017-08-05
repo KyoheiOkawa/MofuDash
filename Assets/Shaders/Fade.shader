@@ -1,12 +1,13 @@
 ﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "Sprites/Fade"
+Shader "UI/Fade"
 {
 	Properties
 	{
-		_MainTex ("Sprite Texture", 2D) = "white" {}
-		_Color ("Tint", Color) = (1,1,1,1)
-		_Fade("Fade",Range(0,1)) = 0.0
+		[PerRendererData]_MainTex ("Sprite Texture", 2D) = "white" {}
+		[PerRendererData]_MaskTex ("Mask Texture", 2D) = "white" {}
+		[PerRendererData]_Color ("Tint", Color) = (1,1,1,1)
+		_Fade("Fade",Range(0,1)) = 0
 		[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
 	}
 
@@ -14,16 +15,16 @@ Shader "Sprites/Fade"
 	{
 		Tags
 		{ 
-			"Queue"="Overlay" 
+			"Queue"="AlphaTest" 
 			"IgnoreProjector"="True" 
-			"RenderType"="Transparent" 
+			"RenderType"="TransparentCutout" 
 			"PreviewType"="Plane"
 			"CanUseSpriteAtlas"="True"
 		}
 
 		Cull Off
 		Lighting Off
-		ZTest Always
+		ZTest [unityGUIZTestMode]
 		ZWrite Off
 		Blend One OneMinusSrcAlpha
 
@@ -33,7 +34,9 @@ Shader "Sprites/Fade"
 			#pragma vertex vert
 			#pragma fragment frag
 			#pragma multi_compile _ PIXELSNAP_ON
+
 			#include "UnityCG.cginc"
+			#include "UnityUI.cginc"
 			
 			struct appdata_t
 			{
@@ -66,14 +69,21 @@ Shader "Sprites/Fade"
 			}
 
 			sampler2D _MainTex;
+			sampler2D _MaskTex;
 
 			fixed4 frag(v2f IN) : SV_Target
 			{
-				fixed4 c = tex2D(_MainTex, IN.texcoord) * IN.color;
-				c.a = _Fade;
-				c.rgb *= c.a;
+				fixed4 tex = tex2D(_MainTex, IN.texcoord) * IN.color;
+				fixed4 c = tex2D(_MaskTex, IN.texcoord);
 
-				return c;
+				if(c.r + _Fade >= 1.0f)
+				{
+					tex.a = 1.0f;
+				}
+				else
+					discard;
+
+				return tex;
 			}
 		ENDCG
 		}

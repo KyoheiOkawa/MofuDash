@@ -29,6 +29,6 @@ public class TitleSceneManager : MonoBehaviour {
 		string nextName = manager.stageSelectSceneName;
 
 		var fadeManager = FadeManager.Instance;
-		fadeManager.WhiteOutTransition (1.0f, nextName);
+		fadeManager.Transition (0.5f, nextName);
     }
 }
