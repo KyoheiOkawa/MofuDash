@@ -6,8 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class FailedPanel : MonoBehaviour {
 	[SerializeField]
-	string m_StageSelectSceneName = "StageSelectTest";
-	[SerializeField]
 	Text m_ProgressText;
 
 	MainSceneManager m_SceneManager;
@@ -26,11 +24,15 @@ public class FailedPanel : MonoBehaviour {
 	public void OnRetryButton()
 	{
 		var scene = SceneManager.GetActiveScene ();
-		SceneManager.LoadScene (scene.name);
+
+		var fade = FadeManager.Instance;
+		fade.Transition (0.5f, scene.name);
 	}
 
 	public void OnBackButton()
 	{
-		SceneManager.LoadScene (m_StageSelectSceneName);
+		string stageSelect = GameManager.Instance.stageSelectSceneName;
+		var fade = FadeManager.Instance;
+		fade.Transition (0.5f, stageSelect);
 	}
 }

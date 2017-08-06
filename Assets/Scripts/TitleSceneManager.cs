@@ -13,7 +13,7 @@ public class TitleSceneManager : MonoBehaviour {
 
 			string baseFilePath = Application.streamingAssetsPath + "/" + "CSV/StageInfo.csv";
 			string filePath = Application.persistentDataPath + "/" + "StageInfo.csv";
-			System.IO.File.Copy( baseFilePath, filePath);
+			System.IO.File.Copy( baseFilePath, filePath, true);
 		}
 #endif
 	}

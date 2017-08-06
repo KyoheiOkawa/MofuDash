@@ -862,6 +862,7 @@ GameObject:
   - component: {fileID: 1269857471}
   - component: {fileID: 1269857473}
   - component: {fileID: 1269857472}
+  - component: {fileID: 1269857474}
   m_Layer: 5
   m_Name: Coin1
   m_TagString: Untagged
@@ -920,6 +921,23 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1269857470}
+--- !u!95 &1269857474
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1269857470}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 94b08bc160e5f4f5aa4d54e740a96aef, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1 &1303785304
 GameObject:
   m_ObjectHideFlags: 0
@@ -1180,6 +1198,7 @@ GameObject:
   - component: {fileID: 1565755026}
   - component: {fileID: 1565755028}
   - component: {fileID: 1565755027}
+  - component: {fileID: 1565755029}
   m_Layer: 5
   m_Name: Coin2
   m_TagString: Untagged
@@ -1238,6 +1257,23 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1565755025}
+--- !u!95 &1565755029
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1565755025}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 94b08bc160e5f4f5aa4d54e740a96aef, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1 &1694458009
 GameObject:
   m_ObjectHideFlags: 0
@@ -1500,6 +1536,7 @@ GameObject:
   - component: {fileID: 2057416440}
   - component: {fileID: 2057416442}
   - component: {fileID: 2057416441}
+  - component: {fileID: 2057416443}
   m_Layer: 5
   m_Name: Coin3
   m_TagString: Untagged
@@ -1558,6 +1595,23 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2057416439}
+--- !u!95 &2057416443
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2057416439}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 94b08bc160e5f4f5aa4d54e740a96aef, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1 &2133225804
 GameObject:
   m_ObjectHideFlags: 0

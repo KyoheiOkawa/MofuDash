@@ -25,6 +25,8 @@ public class PausePanel : MonoBehaviour {
 	{
 		Time.timeScale = 1.0f;
 		string title = GameManager.Instance.stageSelectSceneName;
-		SceneManager.LoadScene (title);
+		//SceneManager.LoadScene (title);
+		var fade = FadeManager.Instance;
+		fade.Transition (0.5f, title);
 	}
 }

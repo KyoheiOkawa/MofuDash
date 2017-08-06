@@ -25,9 +25,11 @@ public class StagePanel : MonoBehaviour {
 	private Image m_ProgressImage;
 	[SerializeField]
 	private Text m_ProgressText;
+
+	private float m_BackUpProgress = 0;
 	// Use this for initialization
 	void Start () {
-		UpdateDisplayInfo ();
+		
 	}
 	
 	// Update is called once per frame
@@ -39,20 +41,58 @@ public class StagePanel : MonoBehaviour {
 	{
 		m_StageNameText.text = m_StageStr;
 
+		StopCoinsAnim ();
+
+		StopAllCoroutines ();
+		StartCoroutine (UpdateCoinAnim ());
+		StartCoroutine(UpdateBarAnim());
+	}
+
+	void StopCoinsAnim()
+	{
+		for (int i = 0; i < m_CoinImage.Length; i++)
+		{
+			m_CoinImage [i].GetComponent<Animator> ().SetTrigger ("Stop");
+		}
+	}
+
+	IEnumerator UpdateCoinAnim()
+	{
 		for (int i = 0; i < m_CoinImage.Length; i++) {
 			if (m_IsGetCoin [i])
 				m_CoinImage [i].sprite = m_Coin;
 			else
 				m_CoinImage [i].sprite = m_CoinBW;
+
+			m_CoinImage [i].GetComponent<Animator> ().SetTrigger ("Change");
+
+			yield return new WaitForSeconds (0.2f);
 		}
+	}
 
-		m_ProgressImage.fillAmount = m_Progress / 100.0f;
+	IEnumerator UpdateBarAnim()
+	{
+		float vel = 0;
+		while (true) {
+			m_BackUpProgress = Mathf.SmoothDamp (m_BackUpProgress, m_Progress, ref vel, 0.5f);
 
-		m_ProgressText.text = m_Progress + "%";
+			m_ProgressImage.fillAmount = m_BackUpProgress / 100.0f;
+			m_ProgressText.text = string.Format("{0,3}%",(int)m_BackUpProgress);
+
+			if (Mathf.Abs(vel) <= 3.0f) {
+				m_ProgressImage.fillAmount = m_Progress / 100.0f;
+				m_ProgressText.text = string.Format("{0,3}%",m_Progress);
+				m_BackUpProgress = m_Progress;
+				break;
+			}
+
+			yield return new WaitForEndOfFrame ();
+		}
 	}
 
 	public void SetDisplayFromStageInfo(StageInfo stageInfo)
 	{
+
 		m_StageStr = stageInfo.stageName;
 		for (int i = 0; i < stageInfo.coin.Length; i++) {
 			m_IsGetCoin [i] = stageInfo.coin [i];

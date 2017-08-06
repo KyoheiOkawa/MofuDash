@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Range: 0
+  m_MaskTex: {fileID: 2800000, guid: 6b4410fe45e7a4b9b880aec17689171c, type: 3}
+  m_MainTex: {fileID: 2800000, guid: 77b037fce806b4e4a8249b45382bc261, type: 3}
 --- !u!222 &222122304674331380
 CanvasRenderer:
   m_ObjectHideFlags: 1

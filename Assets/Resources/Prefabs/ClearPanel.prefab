@@ -518,7 +518,7 @@ MonoBehaviour:
   - {fileID: 114879672618634164}
   - {fileID: 114082868346728676}
   m_CoinSprite: {fileID: 21300000, guid: c38749610277c4032b48d74f37e1a7cc, type: 3}
-  m_StageSelectSceneName: StageSelectTest
+  m_NextButton: {fileID: 114175257236975870}
 --- !u!114 &114994326657125198
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -48,7 +48,10 @@ public class StageSelect : MonoBehaviour {
 
 	public void OnBackButton()
 	{
-		SceneManager.LoadScene (m_TitleSceneName);
+		//SceneManager.LoadScene (m_TitleSceneName);
+		var fade = FadeManager.Instance;
+		string titleScene = GameManager.Instance.titleSceneName;
+		fade.Transition (0.5f, titleScene);
 	}
 
 	public void OnStartButton()
@@ -58,7 +61,12 @@ public class StageSelect : MonoBehaviour {
 		var titleSound = TitleSound.Instance;
 		titleSound.DestroyOwn ();
 
-		SceneManager.LoadScene (startScene);
+		//SceneManager.LoadScene (startScene);
+		var fade = FadeManager.Instance;
+		fade.Transition (0.5f, startScene);
+
+		var manager = GameManager.Instance;
+		manager.nowStageIndex = m_NowSelected;
 	}
 
 	private void SetStageInfo()

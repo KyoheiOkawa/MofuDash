@@ -11,7 +11,7 @@ public class ClearPanel : MonoBehaviour {
 	Sprite m_CoinSprite;
 
 	[SerializeField]
-	string m_StageSelectSceneName = "StageSelectTest";
+	Button m_NextButton;
 
 	MainSceneManager m_SceneManager;
 
@@ -23,6 +23,13 @@ public class ClearPanel : MonoBehaviour {
 			if (m_SceneManager.GetCoinState (i))
 				m_Coins [i].sprite = m_CoinSprite;
 		}
+
+		//次のステージが存在しない場合ネクストボタンを押せなくする
+		var manager = GameManager.Instance;
+		int nowStage = manager.nowStageIndex;
+		var stageInfo = manager.stageInfo;
+		if (nowStage >= stageInfo.Count)
+			m_NextButton.interactable = false;
 	}
 	
 	// Update is called once per frame
@@ -32,17 +39,30 @@ public class ClearPanel : MonoBehaviour {
 
 	public void OnBackButton()
 	{
-		SceneManager.LoadScene (m_StageSelectSceneName);
+		var stageSelect = GameManager.Instance.stageSelectSceneName;
+		var fade = FadeManager.Instance;
+		fade.Transition (0.5f, stageSelect);
 	}
 
 	public void OnRetryButton()
 	{
 		var scene = SceneManager.GetActiveScene ();
-		SceneManager.LoadScene (scene.name);
+
+		var fade = FadeManager.Instance;
+		fade.Transition (0.5f, scene.name);
 	}
 
 	public void OnNextButton()
 	{
+		var manager = GameManager.Instance;
+		var stageInfo = manager.stageInfo;
 
+		int nextIndex = manager.nowStageIndex + 1;
+
+		var next = "Stage" + nextIndex.ToString();
+		manager.nowStageIndex = nextIndex;
+
+		var fade = FadeManager.Instance;
+		fade.Transition (0.5f, next);
 	}
 }

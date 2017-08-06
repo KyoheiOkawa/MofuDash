@@ -44,6 +44,13 @@ public class GameManager
 		get{ return m_StageSelectSceneName; }
 	}
 
+	static string m_TitleSceneName = "TitleTest";
+
+	public string titleSceneName
+	{
+		get{ return m_TitleSceneName; }
+	}
+
 	Dictionary<string,StageInfo> m_StageInfo = new Dictionary<string,StageInfo> ();
 
 	public Dictionary<string,StageInfo> stageInfo {
@@ -51,6 +58,23 @@ public class GameManager
 			ReadStageInfoFromCSV ();
 			return m_StageInfo; 
 		} 
+	}
+
+	static int m_NowStageIndex = 0;
+
+	public int nowStageIndex
+	{
+		get
+		{
+			return m_NowStageIndex;
+		}
+		set
+		{
+			m_NowStageIndex = value;
+
+			if (value >= m_StageInfo.Count)
+				m_NowStageIndex = m_StageInfo.Count;
+		}
 	}
 
 	public bool ChangeStageInfo(string stageName,StageInfo writeStageInfo)
