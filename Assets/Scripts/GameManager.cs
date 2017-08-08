@@ -161,6 +161,25 @@ public class GameManager
 		}
 	}
 
+	/// <summary>
+	/// Gets the collected coin number.
+	/// </summary>
+	/// <returns>The collected coin number.</returns>
+	public int GetCollectedCoinNum()
+	{
+		int res = 0;
+		foreach (var inf in m_StageInfo) 
+		{
+			foreach (bool b in inf.Value.coin) 
+			{
+				if (b)
+					res++;
+			}
+		}
+
+		return res;
+	}
+
 	private string ConvertBoolToStringtf(bool b)
 	{
 		if (b)

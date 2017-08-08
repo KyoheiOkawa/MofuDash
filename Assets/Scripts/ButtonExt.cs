@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
-using System.Reflection;
-using System.Linq;
+
 
 public class ButtonExt : MonoBehaviour {
 	[SerializeField]

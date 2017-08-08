@@ -2,14 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class StageSelect : MonoBehaviour {
 	[SerializeField]
 	string m_TitleSceneName = "TitleTest";
+
 	[SerializeField]
 	StagePanel m_StagePanel;
 
+	Locked m_Locked = null;
+
 	int m_NowSelected = 1;
+
+	bool m_IsRocked = false;
 
 	Dictionary<string,StageInfo> m_StageInfo;
 
@@ -19,6 +25,8 @@ public class StageSelect : MonoBehaviour {
 		m_StageInfo = manager.stageInfo;
 
 		SetStageInfo ();
+
+		m_StagePanel.SetCollectedCoinsText ();
 	}
 	
 	// Update is called once per frame
@@ -56,6 +64,9 @@ public class StageSelect : MonoBehaviour {
 
 	public void OnStartButton()
 	{
+		if (m_Locked)
+			return;
+
 		string startScene = "Stage" + m_NowSelected.ToString ();
 
 		var titleSound = TitleSound.Instance;
@@ -71,8 +82,32 @@ public class StageSelect : MonoBehaviour {
 
 	private void SetStageInfo()
 	{
+		var manager = GameManager.Instance;
+
 		string nextStage = "Stage" + m_NowSelected.ToString ();
 		StageInfo nextStageInfo = m_StageInfo [nextStage];
 		m_StagePanel.SetDisplayFromStageInfo (nextStageInfo);
+
+		m_IsRocked = nextStageInfo.unlockCoin > manager.GetCollectedCoinNum ();
+
+		if (m_IsRocked) 
+		{
+			if (!m_Locked)
+			{
+				var obj = Instantiate (Resources.Load ("Prefabs/Locked")as GameObject, m_StagePanel.gameObject.GetComponent<Transform> ());
+				m_Locked = obj.GetComponent<Locked> ();
+			}
+
+			m_Locked.SetUnlockInfoText (nextStageInfo.unlockCoin);
+		} 
+		else 
+		{
+			if (m_Locked) 
+			{
+				//Destroy (m_Locked.gameObject);
+				m_Locked.GetComponent<Animator>().SetTrigger("Destroy");
+				m_Locked = null;
+			}
+		}
 	}
 }

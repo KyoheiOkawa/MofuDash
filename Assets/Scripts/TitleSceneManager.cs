@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEditor;
 
 public class TitleSceneManager : MonoBehaviour {
 
@@ -23,6 +24,13 @@ public class TitleSceneManager : MonoBehaviour {
 		
 	}
 
+	public void ResetIOSSaveData()
+	{
+		string baseFilePath = Application.streamingAssetsPath + "/" + "CSV/StageInfo.csv";
+		string filePath = Application.persistentDataPath + "/" + "StageInfo.csv";
+		System.IO.File.Copy( baseFilePath, filePath, true);
+	}
+
     public void OnStartButton()
     {
 		var manager = GameManager.Instance;
@@ -31,4 +39,24 @@ public class TitleSceneManager : MonoBehaviour {
 		var fadeManager = FadeManager.Instance;
 		fadeManager.Transition (0.5f, nextName);
     }
+
+	[CustomEditor(typeof(TitleSceneManager))]//拡張するクラスを指定
+	public class TitleSceneManagerEditor : Editor {
+
+		/// <summary>
+		/// InspectorのGUIを更新
+		/// </summary>
+		public override void OnInspectorGUI(){
+			base.OnInspectorGUI ();
+
+			TitleSceneManager manager = target as TitleSceneManager;
+
+			if (GUILayout.Button("ResetIOSSaveData")){
+				Debug.Log ("ResetIOSSaveData");
+				manager.ResetIOSSaveData ();
+			}
+
+		}
+
+	}  
 }

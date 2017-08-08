@@ -25,16 +25,26 @@ public class StagePanel : MonoBehaviour {
 	private Image m_ProgressImage;
 	[SerializeField]
 	private Text m_ProgressText;
+	[SerializeField]
+	private Text m_CollectedCoinText;
 
 	private float m_BackUpProgress = 0;
 	// Use this for initialization
 	void Start () {
-		
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	public void SetCollectedCoinsText()
+	{
+		var manager = GameManager.Instance;
+
+		if(m_CollectedCoinText)
+			m_CollectedCoinText.text = string.Format ("×{0,00}", manager.GetCollectedCoinNum ());
 	}
 
 	private void UpdateDisplayInfo()

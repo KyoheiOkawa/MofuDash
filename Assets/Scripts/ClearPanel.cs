@@ -24,12 +24,20 @@ public class ClearPanel : MonoBehaviour {
 				m_Coins [i].sprite = m_CoinSprite;
 		}
 
-		//次のステージが存在しない場合ネクストボタンを押せなくする
+		//次のステージが存在しないまたはアンロックされていない場合ネクストボタンを押せなくする
 		var manager = GameManager.Instance;
 		int nowStage = manager.nowStageIndex;
-		var stageInfo = manager.stageInfo;
-		if (nowStage >= stageInfo.Count)
+		var stageInfos = manager.stageInfo;
+
+		if (nowStage >= stageInfos.Count)
 			m_NextButton.interactable = false;
+		else
+		{
+			var nextStageInfo = stageInfos ["Stage" + (nowStage + 1).ToString ()];
+
+			if (manager.GetCollectedCoinNum () < nextStageInfo.unlockCoin)
+				m_NextButton.interactable = false;
+		}
 	}
 	
 	// Update is called once per frame
