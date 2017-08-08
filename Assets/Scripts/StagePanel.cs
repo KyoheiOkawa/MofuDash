@@ -7,10 +7,10 @@ using UnityEditor;
 #endif
 
 public class StagePanel : MonoBehaviour {
-	public string m_StageStr = "Stage1";
-	public bool[] m_IsGetCoin = new bool[3];
+	string m_StageStr = "Stage1";
+	bool[] m_IsGetCoin = new bool[3];
 	[Range(0,100)]
-	public int m_Progress = 0;
+	int m_Progress = 0;
 
 	[SerializeField]
 	Sprite m_Coin;
@@ -39,7 +39,8 @@ public class StagePanel : MonoBehaviour {
 
 	private void UpdateDisplayInfo()
 	{
-		m_StageNameText.text = m_StageStr;
+		//m_StageNameText.text = m_StageStr;
+		m_StageNameText.GetComponent<TextFade>().FadeOutIn(0.25f,m_StageStr);
 
 		StopCoinsAnim ();
 

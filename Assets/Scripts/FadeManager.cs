@@ -103,6 +103,8 @@ public class FadeManager : Graphic
 
 	IEnumerator FadeWithSceneChange(float time,string nextSceneName)
 	{
+		SetRayCastBlock (false);
+
 		while (true)
 		{
 			m_Range += Time.deltaTime / time;
@@ -112,13 +114,18 @@ public class FadeManager : Graphic
 			{
 				//SceneManager.LoadScene (nextSceneName);
 				AsyncOperation async = SceneManager.LoadSceneAsync(nextSceneName);
+				async.allowSceneActivation = false;
 
-				while (async.progress <= 0.9f)
+				while (async.progress <= 0.9f) {
+					async.allowSceneActivation = true;
 					yield return null;
+				}
+
+				SetRayCastBlock (false);
 
 				yield return new WaitForSeconds(0.1f);
 
-				SetRayCastBlock (false);
+				m_Range = 1.0f;
 
 				break;
 			}
