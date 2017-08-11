@@ -17,6 +17,9 @@ public class PausePanel : MonoBehaviour {
 
 	public void OnResumeButton()
 	{
+		SoundManager sound = SoundManager.Instance;
+		sound.PlaySE ("Button");
+
 		Time.timeScale = 1.0f;
 		Destroy (this.gameObject);
 	}

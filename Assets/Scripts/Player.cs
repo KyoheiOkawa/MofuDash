@@ -157,6 +157,10 @@ public class Player : MonoBehaviour
     {
         if(collision.CompareTag("DamageObj"))
         {
+			//エフェクトを追加
+			Instantiate (Resources.Load ("Prefabs/DeadEffect")as GameObject,
+				GetComponent<Transform>().position, Quaternion.identity);
+
             m_StateMachine.ChangeState(PlayerDead.Instance);
         }
     }
@@ -195,6 +199,9 @@ public class Player : MonoBehaviour
         // 色の変更
 		if (m_ChangeColor && !CheckFilledWithOtherColor())
         {
+			SoundManager sound = SoundManager.Instance;
+			sound.PlaySE ("Change");
+
             OwnColorChange();
         }
 
@@ -267,6 +274,9 @@ public class Player : MonoBehaviour
 		{
 			return;
 		}
+
+		SoundManager sound = SoundManager.Instance;
+		sound.PlaySE ("Jump");
 
 		// アニメーション管理コンポーネントのパラメータを更新する
 		m_Animator.SetTrigger("Jump");
@@ -477,6 +487,10 @@ public class PlayerDead : State<Player>
 			thisStageInfo.progress = nowProgress;
 			manager.ChangeStageInfo (thisScene.name, thisStageInfo);
 		}
+
+		SoundManager sound = SoundManager.Instance;
+		sound.StopBGM ();
+		sound.PlayJingle ("GameOver");
     }
 
     public override void Execute(Player obj)

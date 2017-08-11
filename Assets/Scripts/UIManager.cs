@@ -31,6 +31,9 @@ public class UIManager : MonoBehaviour {
 
 	public void OnPauseButton()
 	{
+		SoundManager sound = SoundManager.Instance;
+		sound.PlaySE ("Button");
+
 		Time.timeScale = 0.0f;
 		Instantiate (Resources.Load ("Prefabs/PausePanel") as GameObject, GetComponent<Transform> ());
 	}

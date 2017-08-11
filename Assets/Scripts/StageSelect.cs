@@ -36,6 +36,9 @@ public class StageSelect : MonoBehaviour {
 
 	public void OnRightButton()
 	{
+		SoundManager sound = SoundManager.Instance;
+		sound.PlaySE ("Button");
+
 		if (m_NowSelected >= m_StageInfo.Count)
 			m_NowSelected = 1;
 		else
@@ -46,6 +49,9 @@ public class StageSelect : MonoBehaviour {
 
 	public void OnLeftButton()
 	{
+		SoundManager sound = SoundManager.Instance;
+		sound.PlaySE ("Button");
+
 		if (m_NowSelected == 1)
 			m_NowSelected = m_StageInfo.Count;
 		else

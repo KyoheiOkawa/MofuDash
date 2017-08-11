@@ -187,6 +187,10 @@ public class ClearState : State<MainSceneManager>
 			thisStageInfo.coin [i] = obj.GetCoinState (i);
 		}
 		manager.ChangeStageInfo (thisScene.name, thisStageInfo);
+
+		SoundManager sound = SoundManager.Instance;
+		sound.StopBGM ();
+		sound.PlayJingle ("GameClear");
     }
 
     public override void Execute(MainSceneManager obj)

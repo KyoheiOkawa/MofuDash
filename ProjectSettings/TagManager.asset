@@ -6,6 +6,7 @@ TagManager:
   tags:
   - DamageObj
   - Block
+  - BGM
   layers:
   - Default
   - TransparentFX

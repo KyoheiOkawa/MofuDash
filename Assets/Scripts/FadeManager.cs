@@ -98,11 +98,17 @@ public class FadeManager : Graphic
 
 	public void Transition(float time, string transSceneName)
 	{
+		SoundManager sound = SoundManager.Instance;
+		sound.StopBGM ();
+		sound.PlayJingle ("Transition");
+
 		StartCoroutine (FadeWithSceneChange (time, transSceneName));
 	}
 
 	IEnumerator FadeWithSceneChange(float time,string nextSceneName)
 	{
+		SoundManager sound = SoundManager.Instance;
+
 		SetRayCastBlock (false);
 
 		while (true)
@@ -112,18 +118,13 @@ public class FadeManager : Graphic
 
 			if (m_Range >= 1)
 			{
-				//SceneManager.LoadScene (nextSceneName);
 				AsyncOperation async = SceneManager.LoadSceneAsync(nextSceneName);
-				async.allowSceneActivation = false;
 
 				while (async.progress <= 0.9f) {
-					async.allowSceneActivation = true;
-					yield return null;
+					yield return new WaitForEndOfFrame();
 				}
 
 				SetRayCastBlock (false);
-
-				yield return new WaitForSeconds(0.1f);
 
 				m_Range = 1.0f;
 
