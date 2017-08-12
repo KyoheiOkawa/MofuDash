@@ -100,7 +100,7 @@ public class FadeManager : Graphic
 	{
 		SoundManager sound = SoundManager.Instance;
 		sound.StopBGM ();
-		sound.PlayJingle ("Transition");
+		sound.PlayJingle ("Transition2");
 
 		StartCoroutine (FadeWithSceneChange (time, transSceneName));
 	}

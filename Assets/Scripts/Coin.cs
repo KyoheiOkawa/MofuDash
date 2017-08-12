@@ -47,6 +47,9 @@ public class Coin : MonoBehaviour {
 	{
 		if(collision.CompareTag("Player"))
 		{
+			SoundManager sound = SoundManager.Instance;
+			sound.PlaySE ("Coin");
+
 			m_IsCatched = true;
 
 			m_SceneManager.UpdateCoinChatcedState ();
