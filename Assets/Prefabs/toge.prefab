@@ -101,7 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isUpCenter: 1
   _isRightCenter: 1
-  _isForwardCenter: 1
+  _isForwardCenter: 0
 --- !u!212 &212816814540988840
 SpriteRenderer:
   m_ObjectHideFlags: 1

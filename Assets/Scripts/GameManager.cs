@@ -37,14 +37,14 @@ public class GameManager
 		}
 	}
 
-	static string m_StageSelectSceneName = "StageSelectTest";
+	static string m_StageSelectSceneName = "StageSelect";
 
 	public string stageSelectSceneName
 	{
 		get{ return m_StageSelectSceneName; }
 	}
 
-	static string m_TitleSceneName = "TitleTest";
+	static string m_TitleSceneName = "Title";
 
 	public string titleSceneName
 	{
