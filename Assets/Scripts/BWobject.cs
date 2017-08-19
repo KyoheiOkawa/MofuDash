@@ -48,15 +48,35 @@ public class BWobject : MonoBehaviour {
     void ApplyColor()
     {
         var renderer = GetComponent<SpriteRenderer>();
-        switch (_ownColor)
-        {
-            case OwnColor.BLACK:
-                renderer.material = _blackMat;
-                break;
-            case OwnColor.WHITE:
-                renderer.material = _whiteMat;
-                break;
-        }
+
+		if (renderer != null)
+		{
+			switch (_ownColor) {
+			case OwnColor.BLACK:
+				renderer.material = _blackMat;
+				break;
+			case OwnColor.WHITE:
+				renderer.material = _whiteMat;
+				break;
+			}
+		}
+
+		//子オブジェクトが存在する場合
+		//それらのマテリアルも色に合わせて変更する
+		SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer> ();
+		if (renderers.Length > 0)
+		{
+			foreach (SpriteRenderer ren in renderers) {
+				switch (_ownColor) {
+				case OwnColor.BLACK:
+					ren.material = _blackMat;
+					break;
+				case OwnColor.WHITE:
+					ren.material = _whiteMat;
+					break;
+				}
+			}
+		}
     }
 
 #if UNITY_EDITOR
