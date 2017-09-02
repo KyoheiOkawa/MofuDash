@@ -11,30 +11,29 @@ public enum OwnColor
     WHITE = 9
 };
 
-public class BWobject : MonoBehaviour {
+public class BWobject : MonoBehaviour
+{
 
     [SerializeField]
-    protected OwnColor _ownColor;
+    protected OwnColor ownColor;
 
     [SerializeField]
-    private Material _blackMat, _whiteMat;
+    private Material blackMaterial;
 
-    private Rigidbody2D _rig;
+    [SerializeField]
+    private Material whiteMaterial;
 
-	// Use this for initialization
-	public void Start () {
+    private Rigidbody2D rigid2D;
+
+    public void Start()
+    {
         ApplyColor();
         ApplyLayer();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    }
 
     void ApplyLayer()
     {
-        switch(_ownColor)
+        switch (ownColor)
         {
             case OwnColor.BLACK:
                 gameObject.layer = LayerMask.NameToLayer("Black");
@@ -49,34 +48,37 @@ public class BWobject : MonoBehaviour {
     {
         var renderer = GetComponent<SpriteRenderer>();
 
-		if (renderer != null)
-		{
-			switch (_ownColor) {
-			case OwnColor.BLACK:
-				renderer.material = _blackMat;
-				break;
-			case OwnColor.WHITE:
-				renderer.material = _whiteMat;
-				break;
-			}
-		}
+        if (renderer != null)
+        {
+            switch (ownColor)
+            {
+                case OwnColor.BLACK:
+                    renderer.material = blackMaterial;
+                    break;
+                case OwnColor.WHITE:
+                    renderer.material = whiteMaterial;
+                    break;
+            }
+        }
 
-		//子オブジェクトが存在する場合
-		//それらのマテリアルも色に合わせて変更する
-		SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer> ();
-		if (renderers.Length > 0)
-		{
-			foreach (SpriteRenderer ren in renderers) {
-				switch (_ownColor) {
-				case OwnColor.BLACK:
-					ren.material = _blackMat;
-					break;
-				case OwnColor.WHITE:
-					ren.material = _whiteMat;
-					break;
-				}
-			}
-		}
+        //子オブジェクトが存在する場合
+        //それらのマテリアルも色に合わせて変更する
+        SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer>();
+        if (renderers.Length > 0)
+        {
+            foreach (SpriteRenderer ren in renderers)
+            {
+                switch (ownColor)
+                {
+                    case OwnColor.BLACK:
+                        ren.material = blackMaterial;
+                        break;
+                    case OwnColor.WHITE:
+                        ren.material = whiteMaterial;
+                        break;
+                }
+            }
+        }
     }
 
 #if UNITY_EDITOR
