@@ -204,6 +204,11 @@ public class Player : MonoBehaviour
 
             OwnColorChange();
         }
+        else
+        {
+            //オブジェクトに埋まっているときに色変更しようとしたら×エフェクトを生成
+            Instantiate(Resources.Load("Prefabs/Batsu"), transform.position, Quaternion.identity);
+        }
 
 		if (m_Jump) {
 			m_IsNextJump = true;
