@@ -4,46 +4,46 @@ using UnityEngine;
 
 public class StateMachine<T> : Object where T : MonoBehaviour
 {
-    T m_AttachedGameObject;
+    T attachedGameObject;
 
-    State<T> m_State = null;
+    State<T> stage = null;
 
-    public State<T> currentState
+    public State<T> CurrentState
     {
         get
         {
-            return m_State;
+            return stage;
         }
     }
 
     public StateMachine(T obj)
     {
-        m_AttachedGameObject = obj;
+        attachedGameObject = obj;
     }
 
     public void Update()
     {
-        if (m_State != null)
+        if (stage != null)
         {
-            m_State.Execute(m_AttachedGameObject);
+            stage.Execute(attachedGameObject);
         }
     }
 
 	public void FixedUpdate()
 	{
-		if (m_State != null)
+		if (stage != null)
 		{
-			m_State.FixedExecute (m_AttachedGameObject);
+			stage.FixedExecute (attachedGameObject);
 		}
 	}
 
     public void ChangeState(State<T> state)
     {
-        if(m_State != null)
-            m_State.Exit(m_AttachedGameObject);
+        if(stage != null)
+            stage.Exit(attachedGameObject);
 
-        m_State = state;
-        m_State.Enter(m_AttachedGameObject);
+        stage = state;
+        stage.Enter(attachedGameObject);
     }
 }
 

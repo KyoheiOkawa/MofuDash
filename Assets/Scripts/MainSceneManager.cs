@@ -5,102 +5,102 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class MainSceneManager : MonoBehaviour {
+public class MainSceneManager : MonoBehaviour
+{
     [SerializeField]
-    Player m_Player;
+    Player player;
 
     [SerializeField]
-    GameObject m_Canvas;
+    GameObject canvas;
 
 	[SerializeField]
-	Coin[] m_Coin = new Coin[3];
+	Coin[] coin = new Coin[3];
 
-	bool[] m_IsGetCoin = new bool[3];
+	bool[] hasCoin = new bool[3];
 
-    StateMachine<MainSceneManager> m_StateMachine;
+    StateMachine<MainSceneManager> stateMachine;
 
-	int m_Progress = 0;//ステージの進行度（百分率）
+    //ステージの進行度（百分率）
+    int progress = 0;
 
-    public StateMachine<MainSceneManager> stateMachine
+    public StateMachine<MainSceneManager> StateMachine
     {
         get
         {
-            return m_StateMachine;
+            return stateMachine;
         }
     }
 
-    public Player player
+    public Player Player
     {
         get
         {
-            return m_Player;
+            return player;
         }
     }
 
-    public GameObject canvas
+    public GameObject Canvas
     {
         get
         {
-            return m_Canvas;
+            return canvas;
         }
     }
 
-	public int progress
+	public int Progress
 	{
 		get {
-			return m_Progress;
+			return progress;
 		}
 		set{
-			m_Progress = value;
+			progress = value;
 		}
 	}
 
-	// Use this for initialization
-	void Start () {
-		Application.targetFrameRate = 60;
+	void Start ()
+    {
+        if (!player)
+            player = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player>();
+        if (!canvas)
+            canvas = GameObject.Find("Canvas").gameObject;
 
-        m_StateMachine = new StateMachine<MainSceneManager>(this);
-        m_StateMachine.ChangeState(StartState.Instance);
+        Application.targetFrameRate = 60;
+
+        stateMachine = new StateMachine<MainSceneManager>(this);
+        stateMachine.ChangeState(StartState.Instance);
 
 		SetCatchedCoin ();
 		UpdateCoinChatcedState ();
     }
 	
-	// Update is called once per frame
-	void Update () {
-        m_StateMachine.Update();
-    }
-
-    void Reset()
+	void Update ()
     {
-        if (!m_Player)
-            m_Player = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player>();
-
-        if (!m_Canvas)
-            m_Canvas = GameObject.Find("Canvas").gameObject;
+        stateMachine.Update();
     }
 
 	private void SetCatchedCoin()
 	{
 		Scene thisScene = SceneManager.GetActiveScene ();
-		StageInfo thisStageInfo = GameManager.Instance.stageInfo[thisScene.name];
+		StageInfo thisStageInfo = GameManager.Instance.StageInfo[thisScene.name];
 
-		for (int i = 0; i < m_IsGetCoin.Length; i++) {
-			m_Coin [i].isCatched = thisStageInfo.coin[i];
+		for (int i = 0; i < hasCoin.Length; i++)
+        {
+			coin [i].IsCatched = thisStageInfo.coin[i];
 		}
 	}
 
 	public void UpdateCoinChatcedState()
 	{
-		for (int i = 0; i < m_Coin.Length; i++) {
-			m_IsGetCoin [i] = m_Coin [i].isCatched;
+		for (int i = 0; i < coin.Length; i++)
+        {
+			hasCoin [i] = coin [i].IsCatched;
 		}
 	}
 
 	public bool GetCoinState(int id)
 	{
-		if (0 <= id && id < m_IsGetCoin.Length)
-			return m_IsGetCoin [id];
+		if (0 <= id && id < hasCoin.Length)
+			return hasCoin [id];
 
 		return false;
 	}
@@ -126,9 +126,9 @@ public class StartState : State<MainSceneManager>
     {
         base.Enter(obj);
 
-        obj.player.StateMachine.ChangeState(PlayerPause.Instance);
+        obj.Player.StateMachine.ChangeState(PlayerPause.Instance);
 
-        m_StartImage = Instantiate(Resources.Load<Image>("Prefabs/Start"), obj.canvas.transform);
+        m_StartImage = Instantiate(Resources.Load<Image>("Prefabs/Start"), obj.Canvas.transform);
     }
 
     public override void Execute(MainSceneManager obj)
@@ -136,7 +136,7 @@ public class StartState : State<MainSceneManager>
         base.Execute(obj);
 
         if (m_StartImage.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
-            obj.stateMachine.ChangeState(PlayingState.Instance);
+            obj.StateMachine.ChangeState(PlayingState.Instance);
     }
 
     public override void Exit(MainSceneManager obj)
@@ -167,11 +167,12 @@ public class ClearState : State<MainSceneManager>
     {
         base.Enter(obj);
 
-        obj.player.StateMachine.ChangeState(PlayerPause.Instance);
+        obj.Player.StateMachine.ChangeState(PlayerPause.Instance);
 
-        m_ClearImage = Instantiate(Resources.Load<Image>("Prefabs/Clear"), obj.canvas.transform);
+        m_ClearImage = Instantiate(Resources.Load<Image>("Prefabs/Clear"), obj.Canvas.transform);
 
-		Action action = () => {
+		Action action = () => 
+        {
 			Transform canvasTrans = GameObject.Find("Canvas").gameObject.GetComponent<Transform>();
 			ClearPanel panel = Instantiate(Resources.Load("Prefabs/ClearPanel"),canvasTrans) as ClearPanel;
 		};
@@ -181,9 +182,10 @@ public class ClearState : State<MainSceneManager>
 
 		//ステージ情報のセーブ
 		Scene thisScene = SceneManager.GetActiveScene ();
-		StageInfo thisStageInfo = manager.stageInfo [thisScene.name];
+		StageInfo thisStageInfo = manager.StageInfo [thisScene.name];
 		thisStageInfo.progress = 100;
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 3; i++)
+        {
 			thisStageInfo.coin [i] = obj.GetCoinState (i);
 		}
 		manager.ChangeStageInfo (thisScene.name, thisStageInfo);
@@ -224,7 +226,7 @@ public class PlayingState : State<MainSceneManager>
     {
         base.Enter(obj);
 
-        obj.player.StateMachine.ChangeState(PlayerDefault.Instance);
+        obj.Player.StateMachine.ChangeState(PlayerDefault.Instance);
     }
 
     public override void Execute(MainSceneManager obj)

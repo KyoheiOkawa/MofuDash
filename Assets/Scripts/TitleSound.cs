@@ -2,41 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TitleSound : MonoBehaviour {
-	static TitleSound m_Instance;
-	public static TitleSound Instance
-	{
-		get{
-			if (!m_Instance)
-				m_Instance = new TitleSound ();
+public class TitleSound : MonoBehaviour
+{
+    static TitleSound instance;
+    public static TitleSound Instance
+    {
+        get
+        {
+            if (!instance)
+                instance = new TitleSound();
 
-			return m_Instance;
-		}
-	}
+            return instance;
+        }
+    }
 
-	void Awake()
-	{
-		if (m_Instance != null && m_Instance != this) {
-			Destroy (this.gameObject);
-			return;
-		} else
-			m_Instance = this;
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        else
+            instance = this;
 
-		DontDestroyOnLoad (this.gameObject);
-	}
-		
-	// Use this for initialization
-	void Start () {
+        DontDestroyOnLoad(this.gameObject);
+    }
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-	public void DestroyOwn()
-	{
-		Destroy (this.gameObject);
-	}
+    public void DestroyOwn()
+    {
+        Destroy(this.gameObject);
+    }
 }

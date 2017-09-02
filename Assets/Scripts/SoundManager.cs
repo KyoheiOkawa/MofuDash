@@ -2,94 +2,85 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundManager : MonoBehaviour {
-	static AudioSource m_Audio;
+public class SoundManager : MonoBehaviour
+{
+    static AudioSource audioSource;
 
-	static SoundManager m_Instance;
+    static SoundManager instance;
 
-	static public SoundManager Instance
-	{
-		get
-		{
-			if (m_Instance == null) 
-			{
-				m_Instance = (SoundManager)FindObjectOfType (typeof(SoundManager));
+    static public SoundManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = (SoundManager)FindObjectOfType(typeof(SoundManager));
 
-				if (m_Instance == null)
-				{
-					GameObject obj = Instantiate (Resources.Load ("Prefabs/SoundManager")as GameObject);
-					m_Instance = obj.GetComponent<SoundManager> ();
-					m_Audio = obj.GetComponent<AudioSource> ();
-				}
-			}
+                if (instance == null)
+                {
+                    GameObject obj = Instantiate(Resources.Load("Prefabs/SoundManager") as GameObject);
+                    instance = obj.GetComponent<SoundManager>();
+                    audioSource = obj.GetComponent<AudioSource>();
+                }
+            }
 
-			return m_Instance;
-		}
-	}
+            return instance;
+        }
+    }
 
-	void Awake()
-	{
-		DontDestroyOnLoad (this.gameObject);
-	}
+    void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public void PlaySE(string seName)
+    {
+        string path = "SE/" + seName;
 
-	public void PlaySE(string seName)
-	{
-		string path = "SE/" + seName;
+        AudioClip clip = Resources.Load(path) as AudioClip;
+        audioSource.PlayOneShot(clip);
+    }
 
-		AudioClip clip = Resources.Load (path) as AudioClip;
-		m_Audio.PlayOneShot (clip);
-	}
+    public void PlayJingle(string jingleName)
+    {
+        string path = "Jingle/" + jingleName;
 
-	public void PlayJingle(string jingleName)
-	{
-		string path = "Jingle/" + jingleName;
+        AudioClip clip = Resources.Load(path) as AudioClip;
+        audioSource.PlayOneShot(clip);
+    }
 
-		AudioClip clip = Resources.Load (path) as AudioClip;
-		m_Audio.PlayOneShot (clip);
-	}
+    public void StopBGM()
+    {
+        GameObject sound = GameObject.FindGameObjectWithTag("BGM");
 
-	public void StopBGM()
-	{
-		GameObject sound = GameObject.FindGameObjectWithTag ("BGM");
+        if (sound)
+        {
+            sound.GetComponent<AudioSource>().Stop();
+        }
+    }
 
-		if (sound)
-		{
-			sound.GetComponent<AudioSource> ().Stop ();
-		}
-	}
+    public void PauseBGM()
+    {
+        GameObject sound = GameObject.FindGameObjectWithTag("BGM");
 
-	public void PauseBGM()
-	{
-		GameObject sound = GameObject.FindGameObjectWithTag ("BGM");
+        if (sound)
+        {
+            sound.GetComponent<AudioSource>().Pause();
+        }
+    }
 
-		if (sound)
-		{
-			sound.GetComponent<AudioSource> ().Pause ();
-		}
-	}
+    public void ResumeBGM()
+    {
+        GameObject sound = GameObject.FindGameObjectWithTag("BGM");
 
-	public void ResumeBGM()
-	{
-		GameObject sound = GameObject.FindGameObjectWithTag ("BGM");
+        if (sound)
+        {
+            sound.GetComponent<AudioSource>().Play();
+        }
+    }
 
-		if (sound)
-		{
-			sound.GetComponent<AudioSource> ().Play ();
-		}
-	}
-
-	public bool IsFinishedAllSound()
-	{
-		return !m_Audio.isPlaying;
-	}
+    public bool IsFinishedAllSound()
+    {
+        return !audioSource.isPlaying;
+    }
 }

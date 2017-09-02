@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class Player : MonoBehaviour
 {
 	[SerializeField]
@@ -432,9 +433,9 @@ public class PlayerDead : State<Player>
 		//ステージ情報のセーブ
 		//進行状況が前の結果よりよかったらセーブする
 		GameManager manager = GameManager.Instance;
-		int nowProgress = obj.SceneManager.progress;
+		int nowProgress = obj.SceneManager.Progress;
 		Scene thisScene = SceneManager.GetActiveScene ();
-		StageInfo thisStageInfo = manager.stageInfo [thisScene.name];
+		StageInfo thisStageInfo = manager.StageInfo [thisScene.name];
 		if (thisStageInfo.progress < nowProgress) {
 			thisStageInfo.progress = nowProgress;
 			manager.ChangeStageInfo (thisScene.name, thisStageInfo);

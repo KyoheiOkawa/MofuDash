@@ -257,16 +257,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d751e43dc4934fcc83394c3ff2ab597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Coin: {fileID: 21300000, guid: c38749610277c4032b48d74f37e1a7cc, type: 3}
-  m_CoinBW: {fileID: 21300000, guid: c2783b0dc662c476595482bb105bc4e5, type: 3}
-  m_StageNameText: {fileID: 664029548}
-  m_CoinImage:
+  coin: {fileID: 21300000, guid: c38749610277c4032b48d74f37e1a7cc, type: 3}
+  coinGray: {fileID: 21300000, guid: c2783b0dc662c476595482bb105bc4e5, type: 3}
+  stageNameText: {fileID: 664029548}
+  coinImage:
   - {fileID: 1269857472}
   - {fileID: 1565755027}
   - {fileID: 2057416441}
-  m_ProgressImage: {fileID: 974490627}
-  m_ProgressText: {fileID: 407364179}
-  m_CollectedCoinText: {fileID: 1934207072}
+  progressImage: {fileID: 974490627}
+  progressText: {fileID: 407364179}
+  collectedCoinText: {fileID: 1934207072}
 --- !u!1 &407364176
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,9 +488,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f4697c65825943808ebc94676753cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FadeRange: 0
-  m_Text: {fileID: 0}
-  m_Material: {fileID: 2100000, guid: 706fab877efe54c7cbc956173833a1ab, type: 2}
+  fadeRange: 1
+  text: {fileID: 664029548}
+  material: {fileID: 2100000, guid: 706fab877efe54c7cbc956173833a1ab, type: 2}
 --- !u!1 &801750447
 GameObject:
   m_ObjectHideFlags: 0
@@ -1509,8 +1509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d93445240d99e491884a86387e2f8074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TitleSceneName: TitleTest
-  m_StagePanel: {fileID: 286523124}
+  stagePanel: {fileID: 286523124}
 --- !u!4 &1753237370
 Transform:
   m_ObjectHideFlags: 0
@@ -1821,8 +1820,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b862d859810a48aeb32e0be095ef27b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_StageSelect: {fileID: 1753237369}
-  m_FlickInterval: 0.5
+  stageSelect: {fileID: 1753237369}
+  flickInterval: 0.5
 --- !u!114 &2133225807
 MonoBehaviour:
   m_ObjectHideFlags: 0

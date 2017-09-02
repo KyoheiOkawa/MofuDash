@@ -4,73 +4,70 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class ClearPanel : MonoBehaviour {
-	[SerializeField]
-	Image[] m_Coins = new Image[3];
-	[SerializeField]
-	Sprite m_CoinSprite;
+public class ClearPanel : MonoBehaviour
+{
+    [SerializeField]
+    Image[] coins = new Image[3];
+    [SerializeField]
+    Sprite coinSprite;
 
-	[SerializeField]
-	Button m_NextButton;
+    [SerializeField]
+    Button nextButton;
 
-	MainSceneManager m_SceneManager;
+    MainSceneManager sceneManager;
 
-	// Use this for initialization
-	void Start () {
-		m_SceneManager = GameObject.FindObjectOfType<MainSceneManager> ();
+    void Start()
+    {
+        sceneManager = GameObject.FindObjectOfType<MainSceneManager>();
 
-		for (int i = 0; i < m_Coins.Length; i++) {
-			if (m_SceneManager.GetCoinState (i))
-				m_Coins [i].sprite = m_CoinSprite;
-		}
+        for (int i = 0; i < coins.Length; i++)
+        {
+            if (sceneManager.GetCoinState(i))
+                coins[i].sprite = coinSprite;
+        }
 
-		//次のステージが存在しないまたはアンロックされていない場合ネクストボタンを押せなくする
-		var manager = GameManager.Instance;
-		int nowStage = manager.nowStageIndex;
-		var stageInfos = manager.stageInfo;
+        //次のステージが存在しないまたはアンロックされていない場合ネクストボタンを押せなくする
+        var manager = GameManager.Instance;
+        int nowStage = manager.NowStageIndex;
+        var stageInfos = manager.StageInfo;
 
-		if (nowStage >= stageInfos.Count)
-			m_NextButton.interactable = false;
-		else
-		{
-			var nextStageInfo = stageInfos ["Stage" + (nowStage + 1).ToString ()];
+        if (nowStage >= stageInfos.Count)
+            nextButton.interactable = false;
+        else
+        {
+            var nextStageInfo = stageInfos["Stage" + (nowStage + 1).ToString()];
 
-			if (manager.GetCollectedCoinNum () < nextStageInfo.unlockCoin)
-				m_NextButton.interactable = false;
-		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+            if (manager.GetCollectedCoinNum() < nextStageInfo.unlockCoin)
+                nextButton.interactable = false;
+        }
+    }
 
-	public void OnBackButton()
-	{
-		var stageSelect = GameManager.Instance.stageSelectSceneName;
-		var fade = FadeManager.Instance;
-		fade.Transition (0.5f, stageSelect);
-	}
+    public void OnBackButton()
+    {
+        var stageSelect = GameManager.Instance.StageSelectSceneName;
+        var fade = FadeManager.Instance;
+        fade.Transition(0.5f, stageSelect);
+    }
 
-	public void OnRetryButton()
-	{
-		var scene = SceneManager.GetActiveScene ();
+    public void OnRetryButton()
+    {
+        var scene = SceneManager.GetActiveScene();
 
-		var fade = FadeManager.Instance;
-		fade.Transition (0.5f, scene.name);
-	}
+        var fade = FadeManager.Instance;
+        fade.Transition(0.5f, scene.name);
+    }
 
-	public void OnNextButton()
-	{
-		var manager = GameManager.Instance;
-		var stageInfo = manager.stageInfo;
+    public void OnNextButton()
+    {
+        var manager = GameManager.Instance;
+        var stageInfo = manager.StageInfo;
 
-		int nextIndex = manager.nowStageIndex + 1;
+        int nextIndex = manager.NowStageIndex + 1;
 
-		var next = "Stage" + nextIndex.ToString();
-		manager.nowStageIndex = nextIndex;
+        var next = "Stage" + nextIndex.ToString();
+        manager.NowStageIndex = nextIndex;
 
-		var fade = FadeManager.Instance;
-		fade.Transition (0.5f, next);
-	}
+        var fade = FadeManager.Instance;
+        fade.Transition(0.5f, next);
+    }
 }

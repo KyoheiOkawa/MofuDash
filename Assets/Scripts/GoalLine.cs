@@ -8,72 +8,61 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 #endif
 
-public class GoalLine : MonoBehaviour {
+public class GoalLine : MonoBehaviour
+{
     [SerializeField]
-    GameObject m_Player;
-
-    [SerializeField]
-    MainSceneManager m_SceneManager;
+    GameObject player;
 
     [SerializeField]
-    UIManager m_UiManager;
+    MainSceneManager sceneManager;
 
-    [SerializeField, HideInInspector]
-    private Transform m_PlayerTrans;
+    [SerializeField]
+    UIManager uiManager;
 
-    [SerializeField, HideInInspector]
-    private Transform m_OwnTrans;
+    [SerializeField]
+    private Transform playerTrans;
 
-    private float m_StartDistance;//ｹﾞｰﾑ開始時のプレイヤーとの距離
+    //ｹﾞｰﾑ開始時のプレイヤーとの距離
+    private float xLocationDifferenceWithPlayer;
 
-	// Use this for initialization
-	void Start () {
-        m_StartDistance = Mathf.Abs(m_OwnTrans.position.x - m_PlayerTrans.position.x);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        var playerPos = m_PlayerTrans.position;
-        var ownPos = m_OwnTrans.position;
+    void Start()
+    {
+        if (!player)
+            player = GameObject.FindGameObjectWithTag("Player").gameObject;
+        if (!playerTrans)
+            playerTrans = player.GetComponent<Transform>();
+        if (!sceneManager)
+            sceneManager = GameObject.Find("SceneManager").gameObject.GetComponent<MainSceneManager>();
+        if (!uiManager)
+            uiManager = GameObject.FindObjectOfType<UIManager>();
+
+        xLocationDifferenceWithPlayer = Mathf.Abs(transform.position.x - playerTrans.position.x);
+    }
+
+    void Update()
+    {
+        var playerPos = playerTrans.position;
+        var ownPos = transform.position;
         var nowDis = Mathf.Abs(ownPos.x - playerPos.x);
 
         //ゴールした時の処理
-        if (playerPos.x > ownPos.x && m_SceneManager.stateMachine.currentState != ClearState.Instance)
+        if (playerPos.x > ownPos.x && sceneManager.StateMachine.CurrentState != ClearState.Instance)
         {
-            m_UiManager.progress = 1.0f;
-            m_SceneManager.stateMachine.ChangeState(ClearState.Instance);
+            uiManager.progress = 1.0f;
+            sceneManager.StateMachine.ChangeState(ClearState.Instance);
 
-			m_SceneManager.progress = 100;
+            sceneManager.Progress = 100;
         }
-		//プレイ中の処理
-        else if(m_SceneManager.stateMachine.currentState == PlayingState.Instance)
+        //プレイ中の処理
+        else if (sceneManager.StateMachine.CurrentState == PlayingState.Instance)
         {
-			float progress = 1.0f - (nowDis / m_StartDistance);
+            float progress = 1.0f - (nowDis / xLocationDifferenceWithPlayer);
 
             //プログレスバーに現在の進行度をセットする
-			m_UiManager.progress = progress;
+            uiManager.progress = progress;
 
-			//マネージャーに現在の進行度を送信する（百分率で）
-			m_SceneManager.progress = (int)(progress * 100.0f);
-        }
-	}
-
-    private void Reset()
-    {
-        if (!m_OwnTrans)
-            m_OwnTrans = GetComponent<Transform>();
-
-        if (!m_Player)
-            m_Player = GameObject.FindGameObjectWithTag("Player").gameObject;
-
-        if (!m_PlayerTrans)
-        {
-            m_PlayerTrans = m_Player.GetComponent<Transform>();
-        }
-
-        if(!m_SceneManager)
-        {
-            m_SceneManager = GameObject.Find("SceneManager").gameObject.GetComponent<MainSceneManager>();
+            //マネージャーに現在の進行度を送信する（百分率で）
+            sceneManager.Progress = (int)(progress * 100.0f);
         }
     }
 
@@ -85,11 +74,11 @@ public class GoalLine : MonoBehaviour {
         {
             Color color = Color.red;
 
-            Vector3 height = new Vector3(0,50,0);
+            Vector3 height = new Vector3(0, 50, 0);
 
             var goalLine = target as GoalLine;
 
-            Debug.DrawLine(goalLine.m_OwnTrans.position, goalLine.m_OwnTrans.position + height, color);
+            Debug.DrawLine(goalLine.transform.position, goalLine.transform.position + height, color);
         }
 
         public override void OnInspectorGUI()
@@ -98,7 +87,7 @@ public class GoalLine : MonoBehaviour {
 
             var goalLine = target as GoalLine;
 
-            goalLine.m_PlayerTrans = goalLine.m_Player.GetComponent<Transform>();
+            goalLine.playerTrans = goalLine.player.GetComponent<Transform>();
         }
     }
 #endif

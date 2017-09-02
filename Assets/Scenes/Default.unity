@@ -273,10 +273,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e71fdc2891526748916453b822bba5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Player: {fileID: 874429388}
-  m_PlayerTrans: {fileID: 874429394}
-  m_OwnTrans: {fileID: 231545347}
-  m_MaxYOffset: 3
+  player: {fileID: 874429388}
+  playerTransform: {fileID: 874429394}
+  maxYOffset: 3
 --- !u!1001 &265174877
 Prefab:
   m_ObjectHideFlags: 0
@@ -334,6 +333,26 @@ Prefab:
     - target: {fileID: 114720042835370784, guid: f2e47d57727c1ce4581f24e5122e4dba,
         type: 2}
       propertyPath: m_UiManager
+      value: 
+      objectReference: {fileID: 952835806}
+    - target: {fileID: 114720042835370784, guid: f2e47d57727c1ce4581f24e5122e4dba,
+        type: 2}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 874429388}
+    - target: {fileID: 114720042835370784, guid: f2e47d57727c1ce4581f24e5122e4dba,
+        type: 2}
+      propertyPath: playerTrans
+      value: 
+      objectReference: {fileID: 874429394}
+    - target: {fileID: 114720042835370784, guid: f2e47d57727c1ce4581f24e5122e4dba,
+        type: 2}
+      propertyPath: sceneManager
+      value: 
+      objectReference: {fileID: 1541151393}
+    - target: {fileID: 114720042835370784, guid: f2e47d57727c1ce4581f24e5122e4dba,
+        type: 2}
+      propertyPath: uiManager
       value: 
       objectReference: {fileID: 952835806}
     m_RemovedComponents: []
@@ -871,9 +890,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b22b5384d16cec4e8cac06815061989, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Player: {fileID: 874429392}
-  m_Canvas: {fileID: 952835801}
-  m_Coin:
+  player: {fileID: 874429392}
+  canvas: {fileID: 952835801}
+  coin:
   - {fileID: 674490195}
   - {fileID: 1048947192}
   - {fileID: 1786707735}

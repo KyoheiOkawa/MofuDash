@@ -6,125 +6,122 @@ using UnityEngine.UI;
 using UnityEditor;
 #endif
 
-public class StagePanel : MonoBehaviour {
-	string m_StageStr = "Stage1";
-	bool[] m_IsGetCoin = new bool[3];
-	[Range(0,100)]
-	int m_Progress = 0;
+public class StagePanel : MonoBehaviour
+{
+    string stageString = "Stage1";
 
-	[SerializeField]
-	Sprite m_Coin;
-	[SerializeField]
-	Sprite m_CoinBW;
+    bool[] hasCoin = new bool[3];
 
-	[SerializeField]
-	private Text m_StageNameText;
-	[SerializeField]
-	private Image[] m_CoinImage = new Image[3];
-	[SerializeField]
-	private Image m_ProgressImage;
-	[SerializeField]
-	private Text m_ProgressText;
-	[SerializeField]
-	private Text m_CollectedCoinText;
+    [Range(0, 100)]
+    int progress = 0;
 
-	private float m_BackUpProgress = 0;
-	// Use this for initialization
-	void Start () {
+    [SerializeField]
+    Sprite coin;
+    [SerializeField]
+    Sprite coinGray;
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    [SerializeField]
+    private Text stageNameText;
+    [SerializeField]
+    private Image[] coinImage = new Image[3];
+    [SerializeField]
+    private Image progressImage;
+    [SerializeField]
+    private Text progressText;
+    [SerializeField]
+    private Text collectedCoinText;
 
-	public void SetCollectedCoinsText()
-	{
-		var manager = GameManager.Instance;
+    private float backUpProgress = 0;
 
-		if(m_CollectedCoinText)
-			m_CollectedCoinText.text = string.Format ("×{0,00}", manager.GetCollectedCoinNum ());
-	}
+    public void SetCollectedCoinsText()
+    {
+        var manager = GameManager.Instance;
 
-	private void UpdateDisplayInfo()
-	{
-		//m_StageNameText.text = m_StageStr;
-		m_StageNameText.GetComponent<TextFade>().FadeOutIn(0.25f,m_StageStr);
+        if (collectedCoinText)
+            collectedCoinText.text = string.Format("×{0,00}", manager.GetCollectedCoinNum());
+    }
 
-		StopCoinsAnim ();
+    private void UpdateDisplayInfo()
+    {
+        stageNameText.GetComponent<TextFade>().FadeOutIn(0.25f, stageString);
 
-		StopAllCoroutines ();
-		StartCoroutine (UpdateCoinAnim ());
-		StartCoroutine(UpdateBarAnim());
-	}
+        StopCoinsAnim();
 
-	void StopCoinsAnim()
-	{
-		for (int i = 0; i < m_CoinImage.Length; i++)
-		{
-			m_CoinImage [i].GetComponent<Animator> ().SetTrigger ("Stop");
-		}
-	}
+        StopAllCoroutines();
+        StartCoroutine(UpdateCoinAnim());
+        StartCoroutine(UpdateBarAnim());
+    }
 
-	IEnumerator UpdateCoinAnim()
-	{
-		for (int i = 0; i < m_CoinImage.Length; i++) {
-			if (m_IsGetCoin [i])
-				m_CoinImage [i].sprite = m_Coin;
-			else
-				m_CoinImage [i].sprite = m_CoinBW;
+    void StopCoinsAnim()
+    {
+        for (int i = 0; i < coinImage.Length; i++)
+        {
+            coinImage[i].GetComponent<Animator>().SetTrigger("Stop");
+        }
+    }
 
-			m_CoinImage [i].GetComponent<Animator> ().SetTrigger ("Change");
+    IEnumerator UpdateCoinAnim()
+    {
+        for (int i = 0; i < coinImage.Length; i++)
+        {
+            if (hasCoin[i])
+                coinImage[i].sprite = coin;
+            else
+                coinImage[i].sprite = coinGray;
 
-			yield return new WaitForSeconds (0.2f);
-		}
-	}
+            coinImage[i].GetComponent<Animator>().SetTrigger("Change");
 
-	IEnumerator UpdateBarAnim()
-	{
-		float vel = 0;
-		while (true) {
-			m_BackUpProgress = Mathf.SmoothDamp (m_BackUpProgress, m_Progress, ref vel, 0.5f);
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
 
-			m_ProgressImage.fillAmount = m_BackUpProgress / 100.0f;
-			m_ProgressText.text = string.Format("{0,3}%",(int)m_BackUpProgress);
+    IEnumerator UpdateBarAnim()
+    {
+        float vel = 0;
+        while (true)
+        {
+            backUpProgress = Mathf.SmoothDamp(backUpProgress, progress, ref vel, 0.5f);
 
-			if (Mathf.Abs(vel) <= 3.0f) {
-				m_ProgressImage.fillAmount = m_Progress / 100.0f;
-				m_ProgressText.text = string.Format("{0,3}%",m_Progress);
-				m_BackUpProgress = m_Progress;
-				break;
-			}
+            progressImage.fillAmount = backUpProgress / 100.0f;
+            progressText.text = string.Format("{0,3}%", (int)backUpProgress);
 
-			yield return new WaitForEndOfFrame ();
-		}
-	}
+            if (Mathf.Abs(vel) <= 3.0f)
+            {
+                progressImage.fillAmount = progress / 100.0f;
+                progressText.text = string.Format("{0,3}%", progress);
+                backUpProgress = progress;
+                break;
+            }
 
-	public void SetDisplayFromStageInfo(StageInfo stageInfo)
-	{
+            yield return new WaitForEndOfFrame();
+        }
+    }
 
-		m_StageStr = stageInfo.stageName;
-		for (int i = 0; i < stageInfo.coin.Length; i++) {
-			m_IsGetCoin [i] = stageInfo.coin [i];
-		}
-		m_Progress = stageInfo.progress;
+    public void SetDisplayFromStageInfo(StageInfo stageInfo)
+    {
 
-		UpdateDisplayInfo ();
-	}
+        stageString = stageInfo.stageName;
+        for (int i = 0; i < stageInfo.coin.Length; i++)
+        {
+            hasCoin[i] = stageInfo.coin[i];
+        }
+        progress = stageInfo.progress;
 
-	#if UNITY_EDITOR
-	[CustomEditor(typeof(StagePanel))]
-	public class StagePanelEditor : Editor
-	{
-		public override void OnInspectorGUI()
-		{
-			base.OnInspectorGUI();
+        UpdateDisplayInfo();
+    }
 
-			var sp = target as StagePanel;
+#if UNITY_EDITOR
+    [CustomEditor(typeof(StagePanel))]
+    public class StagePanelEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
 
-			sp.UpdateDisplayInfo ();
-		}
-	}
-	#endif
+            var sp = target as StagePanel;
+
+            sp.UpdateDisplayInfo();
+        }
+    }
+#endif
 }

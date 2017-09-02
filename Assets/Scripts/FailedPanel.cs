@@ -4,35 +4,31 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class FailedPanel : MonoBehaviour {
-	[SerializeField]
-	Text m_ProgressText;
+public class FailedPanel : MonoBehaviour
+{
+    [SerializeField]
+    Text progressText;
 
-	MainSceneManager m_SceneManager;
+    MainSceneManager sceneManager;
 
-	// Use this for initialization
-	void Start () {
-		m_SceneManager = GameObject.FindObjectOfType<MainSceneManager> ();
-		m_ProgressText.text = m_SceneManager.progress + "%";
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    void Start()
+    {
+        sceneManager = GameObject.FindObjectOfType<MainSceneManager>();
+        progressText.text = sceneManager.Progress + "%";
+    }
 
-	public void OnRetryButton()
-	{
-		var scene = SceneManager.GetActiveScene ();
+    public void OnRetryButton()
+    {
+        var scene = SceneManager.GetActiveScene();
 
-		var fade = FadeManager.Instance;
-		fade.Transition (0.5f, scene.name);
-	}
+        var fade = FadeManager.Instance;
+        fade.Transition(0.5f, scene.name);
+    }
 
-	public void OnBackButton()
-	{
-		string stageSelect = GameManager.Instance.stageSelectSceneName;
-		var fade = FadeManager.Instance;
-		fade.Transition (0.5f, stageSelect);
-	}
+    public void OnBackButton()
+    {
+        string stageSelect = GameManager.Instance.StageSelectSceneName;
+        var fade = FadeManager.Instance;
+        fade.Transition(0.5f, stageSelect);
+    }
 }

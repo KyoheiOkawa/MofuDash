@@ -160,8 +160,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95b9082f16258402e8292932e94c0829, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MoveDir: 1
-  m_MoveSpeed: 7
+  moveDirection: 1
+  moveSpeed: 1
 --- !u!114 &114073229843986828
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -173,9 +173,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557e245a118beca41a2d216a70968dfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ownColor: 9
-  _blackMat: {fileID: 2100000, guid: 2ac157a58232f324b9b9d958a9efe68f, type: 2}
-  _whiteMat: {fileID: 2100000, guid: 37e68d0f8e1653b4bb16de81c84d4a40, type: 2}
+  ownColor: 9
+  blackMaterial: {fileID: 2100000, guid: 2ac157a58232f324b9b9d958a9efe68f, type: 2}
+  whiteMaterial: {fileID: 2100000, guid: 37e68d0f8e1653b4bb16de81c84d4a40, type: 2}
 --- !u!114 &114845867012898418
 MonoBehaviour:
   m_ObjectHideFlags: 1

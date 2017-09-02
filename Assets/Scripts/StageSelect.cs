@@ -4,116 +4,106 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class StageSelect : MonoBehaviour {
-	[SerializeField]
-	string m_TitleSceneName = "TitleTest";
+public class StageSelect : MonoBehaviour
+{
+    [SerializeField]
+    StagePanel stagePanel;
 
-	[SerializeField]
-	StagePanel m_StagePanel;
+    Locked locked = null;
 
-	Locked m_Locked = null;
+    int nowSelected = 1;
 
-	int m_NowSelected = 1;
+    bool isLocked = false;
 
-	bool m_IsRocked = false;
+    Dictionary<string, StageInfo> stageInfo;
 
-	Dictionary<string,StageInfo> m_StageInfo;
+    void Start()
+    {
+        GameManager manager = GameManager.Instance;
+        stageInfo = manager.StageInfo;
 
-	// Use this for initialization
-	void Start () {
-		GameManager manager = GameManager.Instance;
-		m_StageInfo = manager.stageInfo;
+        SetStageInfo();
 
-		SetStageInfo ();
+        stagePanel.SetCollectedCoinsText();
+    }
 
-		m_StagePanel.SetCollectedCoinsText ();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public void OnRightButton()
+    {
+        SoundManager sound = SoundManager.Instance;
+        sound.PlaySE("Button");
 
-	public void OnRightButton()
-	{
-		SoundManager sound = SoundManager.Instance;
-		sound.PlaySE ("Button");
+        if (nowSelected >= stageInfo.Count)
+            nowSelected = 1;
+        else
+            nowSelected++;
 
-		if (m_NowSelected >= m_StageInfo.Count)
-			m_NowSelected = 1;
-		else
-			m_NowSelected++;
-		
-		SetStageInfo ();
-	}
+        SetStageInfo();
+    }
 
-	public void OnLeftButton()
-	{
-		SoundManager sound = SoundManager.Instance;
-		sound.PlaySE ("Button");
+    public void OnLeftButton()
+    {
+        SoundManager sound = SoundManager.Instance;
+        sound.PlaySE("Button");
 
-		if (m_NowSelected == 1)
-			m_NowSelected = m_StageInfo.Count;
-		else
-			m_NowSelected--;
+        if (nowSelected == 1)
+            nowSelected = stageInfo.Count;
+        else
+            nowSelected--;
 
-		SetStageInfo ();
-	}
+        SetStageInfo();
+    }
 
-	public void OnBackButton()
-	{
-		//SceneManager.LoadScene (m_TitleSceneName);
-		var fade = FadeManager.Instance;
-		string titleScene = GameManager.Instance.titleSceneName;
-		fade.Transition (0.5f, titleScene);
-	}
+    public void OnBackButton()
+    {
+        var fade = FadeManager.Instance;
+        string titleScene = GameManager.Instance.TitleSceneName;
+        fade.Transition(0.5f, titleScene);
+    }
 
-	public void OnStartButton()
-	{
-		if (m_Locked)
-			return;
+    public void OnStartButton()
+    {
+        if (locked)
+            return;
 
-		string startScene = "Stage" + m_NowSelected.ToString ();
+        string startScene = "Stage" + nowSelected.ToString();
 
-		var titleSound = TitleSound.Instance;
-		titleSound.DestroyOwn ();
+        var titleSound = TitleSound.Instance;
+        titleSound.DestroyOwn();
 
-		//SceneManager.LoadScene (startScene);
-		var fade = FadeManager.Instance;
-		fade.Transition (0.5f, startScene);
+        var fade = FadeManager.Instance;
+        fade.Transition(0.5f, startScene);
 
-		var manager = GameManager.Instance;
-		manager.nowStageIndex = m_NowSelected;
-	}
+        var manager = GameManager.Instance;
+        manager.NowStageIndex = nowSelected;
+    }
 
-	private void SetStageInfo()
-	{
-		var manager = GameManager.Instance;
+    private void SetStageInfo()
+    {
+        var manager = GameManager.Instance;
 
-		string nextStage = "Stage" + m_NowSelected.ToString ();
-		StageInfo nextStageInfo = m_StageInfo [nextStage];
-		m_StagePanel.SetDisplayFromStageInfo (nextStageInfo);
+        string nextStage = "Stage" + nowSelected.ToString();
+        StageInfo nextStageInfo = stageInfo[nextStage];
+        stagePanel.SetDisplayFromStageInfo(nextStageInfo);
 
-		m_IsRocked = nextStageInfo.unlockCoin > manager.GetCollectedCoinNum ();
+        isLocked = nextStageInfo.unlockCoin > manager.GetCollectedCoinNum();
 
-		if (m_IsRocked) 
-		{
-			if (!m_Locked)
-			{
-				var obj = Instantiate (Resources.Load ("Prefabs/Locked")as GameObject, m_StagePanel.gameObject.GetComponent<Transform> ());
-				m_Locked = obj.GetComponent<Locked> ();
-			}
+        if (isLocked)
+        {
+            if (!locked)
+            {
+                var obj = Instantiate(Resources.Load("Prefabs/Locked") as GameObject, stagePanel.gameObject.GetComponent<Transform>());
+                locked = obj.GetComponent<Locked>();
+            }
 
-			m_Locked.SetUnlockInfoText (nextStageInfo.unlockCoin);
-		} 
-		else 
-		{
-			if (m_Locked) 
-			{
-				//Destroy (m_Locked.gameObject);
-				m_Locked.GetComponent<Animator>().SetTrigger("Destroy");
-				m_Locked = null;
-			}
-		}
-	}
+            locked.SetUnlockInfoText(nextStageInfo.unlockCoin);
+        }
+        else
+        {
+            if (locked)
+            {
+                locked.GetComponent<Animator>().SetTrigger("Destroy");
+                locked = null;
+            }
+        }
+    }
 }

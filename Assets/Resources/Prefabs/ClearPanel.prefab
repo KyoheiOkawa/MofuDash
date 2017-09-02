@@ -513,12 +513,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ffca2e0bbc084b10a0962e8103ccaaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Coins:
+  coins:
   - {fileID: 114196803176218688}
   - {fileID: 114879672618634164}
   - {fileID: 114082868346728676}
-  m_CoinSprite: {fileID: 21300000, guid: c38749610277c4032b48d74f37e1a7cc, type: 3}
-  m_NextButton: {fileID: 114175257236975870}
+  coinSprite: {fileID: 21300000, guid: c38749610277c4032b48d74f37e1a7cc, type: 3}
+  nextButton: {fileID: 114175257236975870}
 --- !u!114 &114994326657125198
 MonoBehaviour:
   m_ObjectHideFlags: 1

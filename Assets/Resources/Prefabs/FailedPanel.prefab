@@ -172,8 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5bb1f9566c074b2fa99c6cc03a3095e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_StageSelectSceneName: StageSelectTest
-  m_ProgressText: {fileID: 114323244154822054}
+  progressText: {fileID: 114323244154822054}
 --- !u!114 &114323244154822054
 MonoBehaviour:
   m_ObjectHideFlags: 1

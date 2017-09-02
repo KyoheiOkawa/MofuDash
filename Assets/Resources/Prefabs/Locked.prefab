@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3af1324ea8c51448382b4f2fbdd6e1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ComTex: {fileID: 114056040387422164}
+  unlockHintComment: {fileID: 114232170738466898}
 --- !u!114 &114232170738466898
 MonoBehaviour:
   m_ObjectHideFlags: 1

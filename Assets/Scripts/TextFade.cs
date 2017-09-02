@@ -3,91 +3,79 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TextFade : MonoBehaviour {
-	[SerializeField,Range(0,1)]
-	float m_FadeRange = 1;
+public class TextFade : MonoBehaviour
+{
+    [SerializeField, Range(0, 1)]
+    float fadeRange = 1;
 
-	[SerializeField,HideInInspector]
-	Text m_Text;
+    [SerializeField]
+    Text text;
 
-	[SerializeField,HideInInspector]
-	Material m_Material;
+    [SerializeField]
+    Material material;
 
-	void Reset()
-	{
-		if(!m_Material)
-			m_Material = GetComponent<Text> ().material;
+    void Start()
+    {
+        if (!material)
+            material = GetComponent<Text>().material;
 
-		if (!m_Text)
-			m_Text = GetComponent<Text> ();
-	}
+        if (!text)
+            text = GetComponent<Text>();
+    }
 
-	// Use this for initialization
-	void Start () {
-		if(!m_Material)
-			m_Material = GetComponent<Text> ().material;
+    void UpdateUniform()
+    {
+        material.SetFloat("_Fade", fadeRange);
+    }
 
-		if (!m_Text)
-			m_Text = GetComponent<Text> ();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public void FadeOutIn(float time, string nextStr)
+    {
+        StopCoroutine("Fade");
+        fadeRange = 1.0f;
+        StartCoroutine(Fade(time, nextStr));
+    }
 
-	void UpdateUniform()
-	{
-		m_Material.SetFloat ("_Fade", m_FadeRange);
-	}
+    IEnumerator Fade(float time, string nextStr)
+    {
+        while (true)
+        {
+            fadeRange -= Time.deltaTime / time;
 
-	public void FadeOutIn(float time, string nextStr)
-	{
-		StopCoroutine ("Fade");
-		StartCoroutine(Fade (time, nextStr));
-	}
+            if (fadeRange <= 0.0f)
+            {
+                fadeRange = 0;
+                UpdateUniform();
+                break;
+            }
 
-	IEnumerator Fade(float time,string nextStr)
-	{
-		while (true)
-		{
-			m_FadeRange -= Time.deltaTime / time;
+            UpdateUniform();
 
-			if (m_FadeRange <= 0.0f) 
-			{
-				m_FadeRange = 0;
-				UpdateUniform ();
-				break;
-			}
+            yield return null;
+        }
 
-			UpdateUniform ();
+        text.text = nextStr;
 
-			yield return null;
-		}
+        while (true)
+        {
+            fadeRange += Time.deltaTime / time;
 
-		m_Text.text = nextStr;
+            if (fadeRange >= 1.0f)
+            {
+                fadeRange = 1.0f;
+                UpdateUniform();
+                break;
+            }
 
-		while (true) 
-		{
-			m_FadeRange += Time.deltaTime / time;
+            UpdateUniform();
 
-			if (m_FadeRange >= 1.0f) 
-			{
-				m_FadeRange = 1.0f;
-				UpdateUniform ();
-				break;
-			}
+            yield return null;
+        }
+    }
 
-			UpdateUniform ();
-
-			yield return null;
-		}
-	}
-
-	#if UNITY_EDITOR
-	protected void OnValidate()
-	{
-		UpdateUniform ();
-	}
-	#endif
+#if UNITY_EDITOR
+    protected void OnValidate()
+    {
+        UpdateUniform();
+    }
+#endif
 }

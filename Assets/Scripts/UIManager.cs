@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour {
+public class UIManager : MonoBehaviour
+{
+    //現在の進行度を示すバー
     [SerializeField]
-    Image m_ProgressBar;//現在の進行度を示すバー
+    Image m_ProgressBar;
 
     public float progress
     {
@@ -19,22 +21,12 @@ public class UIManager : MonoBehaviour {
         }
     }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public void OnPauseButton()
+    {
+        SoundManager sound = SoundManager.Instance;
+        sound.PlaySE("Button");
 
-	public void OnPauseButton()
-	{
-		SoundManager sound = SoundManager.Instance;
-		sound.PlaySE ("Button");
-
-		Time.timeScale = 0.0f;
-		Instantiate (Resources.Load ("Prefabs/PausePanel") as GameObject, GetComponent<Transform> ());
-	}
+        Time.timeScale = 0.0f;
+        Instantiate(Resources.Load("Prefabs/PausePanel") as GameObject, GetComponent<Transform>());
+    }
 }

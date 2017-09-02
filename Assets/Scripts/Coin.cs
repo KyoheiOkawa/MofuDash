@@ -2,60 +2,51 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Coin : MonoBehaviour {
-	bool m_IsCatched = false;
+public class Coin : MonoBehaviour
+{
+    bool isCatched = false;
 
-	[SerializeField]
-	MainSceneManager m_SceneManager;
+    [SerializeField]
+    MainSceneManager sceneManager;
 
-	[SerializeField,HideInInspector]
-	Animator m_Anim;
+    [SerializeField]
+    Animator animator;
 
-	public bool isCatched
-	{
-		get{
-			return m_IsCatched;
-		}
-		set{
-			m_IsCatched = value;
+    public bool IsCatched
+    {
+        get
+        {
+            return isCatched;
+        }
+        set
+        {
+            isCatched = value;
 
-			if (m_IsCatched)
-				GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite>("Sprites/catchedcoin");
-		}
-	}
+            if (isCatched)
+                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/catchedcoin");
+        }
+    }
 
-	// Use this for initialization
-	void Start () {
-		if(!m_SceneManager)
-			m_SceneManager = GameObject.FindObjectOfType<MainSceneManager> ();
+    void Start()
+    {
+        if (!sceneManager)
+            sceneManager = GameObject.FindObjectOfType<MainSceneManager>();
+        if (!animator)
+            animator = GetComponent<Animator>();
+    }
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            SoundManager sound = SoundManager.Instance;
+            sound.PlaySE("Coin");
 
-	void Reset(){
-		if (!m_SceneManager)
-			m_SceneManager = GameObject.FindObjectOfType<MainSceneManager> ();
-		if (!m_Anim)
-			m_Anim = GetComponent<Animator> ();
-	}
+            isCatched = true;
 
-	private void OnTriggerEnter2D(Collider2D collision)
-	{
-		if(collision.CompareTag("Player"))
-		{
-			SoundManager sound = SoundManager.Instance;
-			sound.PlaySE ("Coin");
+            sceneManager.UpdateCoinChatcedState();
 
-			m_IsCatched = true;
-
-			m_SceneManager.UpdateCoinChatcedState ();
-
-			//GetComponent<SpriteRenderer> ().color = new Color (1, 1, 1, 0);
-			m_Anim.SetTrigger("Get");
-		}
-	}
+            animator.SetTrigger("Get");
+        }
+    }
 }

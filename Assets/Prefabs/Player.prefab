@@ -107,17 +107,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c477be8cf1e8c6247a4096b26aa69398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MoveSpeed: 6
-  m_JumpPower: 7
-  m_JumpStep: 2
-  m_Renderer: {fileID: 212704168827230510}
-  m_Trans: {fileID: 4090111502863128}
-  m_Rigid: {fileID: 50147826826179176}
-  m_Animator: {fileID: 95656580493755572}
-  m_Mat: {fileID: 2100000, guid: de1c65e901e197f4e95812be8063c117, type: 2}
-  m_DeadJumpPower: 250
-  m_DeadUnderPosY: -8
-  m_SceneManager: {fileID: 0}
+  moveSpeed: 6
+  jumpPower: 7
+  maxJumpSteps: 2
+  spriteRender: {fileID: 0}
+  rigid2D: {fileID: 0}
+  animator: {fileID: 0}
+  material: {fileID: 0}
+  jumpPowerWhenDead: 250
+  deadUnderPosY: -8
+  sceneManager: {fileID: 0}
 --- !u!212 &212704168827230510
 SpriteRenderer:
   m_ObjectHideFlags: 1
