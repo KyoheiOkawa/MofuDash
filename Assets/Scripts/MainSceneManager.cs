@@ -126,7 +126,7 @@ public class StartState : State<MainSceneManager>
     {
         base.Enter(obj);
 
-        obj.player.stateMachine.ChangeState(PlayerPause.Instance);
+        obj.player.StateMachine.ChangeState(PlayerPause.Instance);
 
         m_StartImage = Instantiate(Resources.Load<Image>("Prefabs/Start"), obj.canvas.transform);
     }
@@ -167,7 +167,7 @@ public class ClearState : State<MainSceneManager>
     {
         base.Enter(obj);
 
-        obj.player.stateMachine.ChangeState(PlayerPause.Instance);
+        obj.player.StateMachine.ChangeState(PlayerPause.Instance);
 
         m_ClearImage = Instantiate(Resources.Load<Image>("Prefabs/Clear"), obj.canvas.transform);
 
@@ -224,7 +224,7 @@ public class PlayingState : State<MainSceneManager>
     {
         base.Enter(obj);
 
-        obj.player.stateMachine.ChangeState(PlayerDefault.Instance);
+        obj.player.StateMachine.ChangeState(PlayerDefault.Instance);
     }
 
     public override void Execute(MainSceneManager obj)
