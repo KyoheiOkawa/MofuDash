@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 61556281535887280}
   - component: {fileID: 114741675036066540}
   m_Layer: 0
-  m_Name: SafeBlock
+  m_Name: SafeBlockOne
   m_TagString: Block
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,7 +36,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1937456091057362}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 21.675001, y: -4.675, z: 0.425}
+  m_LocalPosition: {x: 4.675, y: -4.675, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -61,11 +61,11 @@ BoxCollider2D:
     oldSize: {x: 0.85333335, y: 0.85333335}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
-    drawMode: 1
+    drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.8186631, y: 0.8428416}
   m_EdgeRadius: 0
 --- !u!114 &114741675036066540
 MonoBehaviour:
@@ -80,7 +80,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isUpCenter: 1
   _isRightCenter: 1
-  _isForwardCenter: 1
+  _isForwardCenter: 0
 --- !u!212 &212160719471066760
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -117,7 +117,7 @@ SpriteRenderer:
   m_Color: {r: 0.9117647, g: 0.9117647, b: 0.9117647, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 1
+  m_DrawMode: 0
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
