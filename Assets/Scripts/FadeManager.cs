@@ -54,15 +54,12 @@ public class FadeManager : Graphic
 		DontDestroyOnLoad (this.gameObject);
 	}
 
-	// Use this for initialization
-	void Start () {
-		UpdateUniform ();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    // Use this for initialization
+    void Start()
+    {
+        UpdateUniform();
+    }
 
-	}
 
 	protected override void OnPopulateMesh( VertexHelper vh )
 	{
@@ -91,15 +88,15 @@ public class FadeManager : Graphic
 		lb.uv0 = new Vector2 (0, 0);
 
 
-		vh.AddUIVertexQuad( new UIVertex[] {
+		vh.AddUIVertexQuad( new UIVertex[] 
+        {
 			lb, rb, rt, lt
 		} );
 	}
 
-	public void Transition(float time, string transSceneName)
+    public void Transition(float time, string transSceneName)
 	{
 		SoundManager sound = SoundManager.Instance;
-		sound.StopBGM ();
 		sound.PlayJingle ("Transition2");
 
 		StartCoroutine (FadeWithSceneChange (time, transSceneName));
