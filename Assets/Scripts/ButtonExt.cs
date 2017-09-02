@@ -5,65 +5,60 @@ using UnityEngine.UI;
 using UnityEditor;
 
 
-public class ButtonExt : MonoBehaviour {
-	[SerializeField]
-	StageSelect m_StageSelect;
+public class ButtonExt : MonoBehaviour
+{
+    [SerializeField]
+    StageSelect stageSelect;
 
-	[SerializeField]
-	float m_FlickInterval = 0.5f;
+    [SerializeField]
+    float flickInterval = 0.5f;
 
-	float m_FlickCount = 0.0f;
+    float flickCOunt = 0.0f;
 
-	Vector3 m_StartLoc;
+    Vector3 startLocation;
 
-	bool m_IsBegin = false;
+    bool isBegin = false;
 
-	// Use this for initialization
-	void Start () 
-	{
-		
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		if (m_IsBegin)
-			m_FlickCount += Time.deltaTime;
-	}
-		
-	public void OnTouchDown()
-	{
-		if (!m_IsBegin)
-		{
-			m_IsBegin = true;
-			m_FlickCount = 0.0f;
-			m_StartLoc = Input.mousePosition;
-		}
-	}
+    void Update()
+    {
+        if (isBegin)
+            flickCOunt += Time.deltaTime;
+    }
 
-	public void OnTouchEnded()
-	{
-		if (m_FlickCount <= m_FlickInterval) 
-		{
-			float minLength = 50.0f;
+    public void OnTouchDown()
+    {
+        if (!isBegin)
+        {
+            isBegin = true;
+            flickCOunt = 0.0f;
+            startLocation = Input.mousePosition;
+        }
+    }
 
-			float slideLen = m_StartLoc.x - Input.mousePosition.x;
+    public void OnTouchEnded()
+    {
+        if (flickCOunt <= flickInterval)
+        {
+            float minLength = 50.0f;
 
-			if (Mathf.Abs (slideLen) <= minLength) 
-			{
-				m_StageSelect.OnStartButton ();
-				return;
-			}
+            float slideLen = startLocation.x - Input.mousePosition.x;
 
-			if (slideLen > 0) 
-			{
-				m_StageSelect.OnLeftButton ();
-			} else 
-			{
-				m_StageSelect.OnRightButton ();
-			}
-		}
+            if (Mathf.Abs(slideLen) <= minLength)
+            {
+                stageSelect.OnStartButton();
+                return;
+            }
 
-		m_IsBegin = false;
-	}
+            if (slideLen > 0)
+            {
+                stageSelect.OnLeftButton();
+            }
+            else
+            {
+                stageSelect.OnRightButton();
+            }
+        }
+
+        isBegin = false;
+    }
 }
