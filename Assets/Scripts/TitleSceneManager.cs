@@ -38,6 +38,18 @@ public class TitleSceneManager : MonoBehaviour
         fadeManager.Transition(0.5f, nextName);
     }
 
+    public void OnHowToPlayButton()
+    {
+        var manager = GameManager.Instance;
+        string nextName = manager.TutorialSceneName;
+
+        var titleSound = TitleSound.Instance;
+        titleSound.DestroyOwn();
+
+        var fadeManager = FadeManager.Instance;
+        fadeManager.Transition(0.5f, nextName);
+    }
+
 #if UNITY_EDITOR
     [CustomEditor(typeof(TitleSceneManager))]
     public class TitleSceneManagerEditor : Editor

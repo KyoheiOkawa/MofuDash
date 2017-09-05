@@ -46,6 +46,16 @@ public class GameManager
         }
     }
 
+    static string tutorialSceneName = "Tutorial";
+
+    public string TutorialSceneName
+    {
+        get
+        {
+            return tutorialSceneName;
+        }
+    }
+
     Dictionary<string, StageInfo> stageInfo = new Dictionary<string, StageInfo>();
 
     public Dictionary<string, StageInfo> StageInfo
