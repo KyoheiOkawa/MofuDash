@@ -85,7 +85,7 @@ public class Player : MonoBehaviour
         material = spriteRender.sharedMaterial;
 
         ownColor = OwnColor.BLACK;
-        OwnColorChange();
+        OwnColorChange(false);
 
         if (!sceneManager)
             sceneManager = GameObject.FindObjectOfType<MainSceneManager>();
@@ -106,6 +106,9 @@ public class Player : MonoBehaviour
 
 	void OnCollisionEnter2D(Collision2D other)
 	{
+        if (stateMachine.CurrentState != PlayerDefault.Instance)
+            return;
+
         //ブロックに横からぶつかった場合ゲームオーバー
         if(other.gameObject.CompareTag("Block"))
         {
@@ -136,7 +139,10 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("DamageObj"))
+        if (stateMachine.CurrentState != PlayerDefault.Instance)
+            return;
+
+        if (collision.CompareTag("DamageObj"))
         {
 			//死んだときのエフェクトを生成
 			Instantiate (Resources.Load ("Prefabs/DeadEffect")as GameObject,
@@ -155,9 +161,6 @@ public class Player : MonoBehaviour
         // 色の変更
 		if (isColorChangeButtonPressed && !CheckFilledWithOtherColor())
         {
-			SoundManager sound = SoundManager.Instance;
-			sound.PlaySE ("Change");
-
             OwnColorChange();
         }
 
@@ -200,7 +203,7 @@ public class Player : MonoBehaviour
         rigid2D.AddForce(new Vector2(0, jumpPowerWhenDead));
     }
 
-    void Move(Vector2 InputVec)
+    public void Move(Vector2 InputVec)
 	{
 		// 渡されたベクトルを、移動するベクトルに変換する
 		Vector2 moveVec = InputVec * moveSpeed;
@@ -215,7 +218,7 @@ public class Player : MonoBehaviour
 		animator.SetFloat("AbsXSpeed", Mathf.Abs(moveVec.x));
 	}
 
-	void Jump()
+	public void Jump()
 	{
 		// 現在ジャンプ中なら、処理を行わない
 		if (jumpCount >= maxJumpSteps)
@@ -241,13 +244,13 @@ public class Player : MonoBehaviour
 		isJumpNextFixedFrame = false;
 	}
 
-	/// <summary>
-	/// 現在のプレイヤーの色を変える関数　白→黒→白...　と変わる
-	/// </summary>
+    /// <summary>
+    /// 現在のプレイヤーの色を変える関数　白→黒→白...　と変わる
+    /// </summary>
     /// <returns>
     /// 変更後の色
     /// </returns>
-	OwnColor OwnColorChange()
+    public OwnColor OwnColorChange(bool playSe = true)
 	{
 		OwnColor ownColor = OwnColor.WHITE;
 		// 変更後のレイヤー
@@ -276,6 +279,12 @@ public class Player : MonoBehaviour
 		this.ownColor = ownColor;
 
 		gameObject.layer = layer;
+
+        if (playSe)
+        {
+            SoundManager sound = SoundManager.Instance;
+            sound.PlaySE("Change");
+        }
 
         return ownColor;
 	}
@@ -449,6 +458,43 @@ public class PlayerDead : State<Player>
     public override void Execute(Player obj)
     {
         base.Execute(obj);
+    }
+
+    public override void Exit(Player obj)
+    {
+        base.Exit(obj);
+    }
+}
+
+public class TutorialMove : State<Player>
+{
+    private static TutorialMove m_Instance;
+    public static TutorialMove Instance
+    {
+        get
+        {
+            if (m_Instance == null)
+                m_Instance = CreateInstance<TutorialMove>();
+
+            return m_Instance;
+        }
+    }
+
+    public override void Enter(Player obj)
+    {
+        base.Enter(obj);
+    }
+
+    public override void Execute(Player obj)
+    {
+        base.Execute(obj);
+    }
+
+    public override void FixedExecute(Player obj)
+    {
+        base.FixedExecute(obj);
+
+        obj.Move(new Vector2(1.0f, 0));
     }
 
     public override void Exit(Player obj)
