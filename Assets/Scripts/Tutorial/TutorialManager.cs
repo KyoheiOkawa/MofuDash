@@ -251,8 +251,7 @@ public class MoveState : State<TutorialManager>
 
             string[] comments =
             {
-                "そしてジャンプ！！",
-                "ジャンプボタンを押そう"
+                "そしてジャンプ！！"
             };
 
             manager.Player.StateMachine.ChangeState(PlayerPause.Instance);
