@@ -96,6 +96,9 @@ public class Player : MonoBehaviour
 		isJumpButtonPressed = Input.GetButtonDown("Jump") || CrossPlatformInputManager.GetButtonDown("Jump");
 		isColorChangeButtonPressed = Input.GetButtonDown("Fire1") || CrossPlatformInputManager.GetButtonDown("Fire1");
 
+        if (jumpCount >= maxJumpSteps)
+            isJumpButtonPressed = false;
+
         stateMachine.Update();
 	}
 
