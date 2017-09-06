@@ -28,14 +28,28 @@ public class TextFade : MonoBehaviour
         material.SetFloat("_Fade", fadeRange);
     }
 
-    public void FadeOutIn(float time, string nextStr)
+    public void FadeAndTextChange(float time, string nextStr)
     {
-        StopCoroutine("Fade");
+        StopCoroutine("FadeAndTextChangeCroutine");
         fadeRange = 1.0f;
-        StartCoroutine(Fade(time, nextStr));
+        StartCoroutine(FadeAndTextChangeCroutine(time, nextStr));
     }
 
-    IEnumerator Fade(float time, string nextStr)
+    public void FadeIn(float time)
+    {
+        StopCoroutine("FadeInCoroutine");
+        fadeRange = 0.0f;
+        StartCoroutine(FadeInCoroutine(time));
+    }
+
+    public void FadeOut(float time)
+    {
+        StopCoroutine("FadeOutCoroutine");
+        fadeRange = 1.0f;
+        StartCoroutine(FadeOutCoroutine(time));
+    }
+
+    IEnumerator FadeAndTextChangeCroutine(float time, string nextStr)
     {
         while (true)
         {
@@ -55,6 +69,44 @@ public class TextFade : MonoBehaviour
 
         text.text = nextStr;
 
+        while (true)
+        {
+            fadeRange += Time.deltaTime / time;
+
+            if (fadeRange >= 1.0f)
+            {
+                fadeRange = 1.0f;
+                UpdateUniform();
+                break;
+            }
+
+            UpdateUniform();
+
+            yield return null;
+        }
+    }
+
+    IEnumerator FadeOutCoroutine(float time)
+    {
+        while (true)
+        {
+            fadeRange -= Time.deltaTime / time;
+
+            if (fadeRange <= 0.0f)
+            {
+                fadeRange = 0;
+                UpdateUniform();
+                break;
+            }
+
+            UpdateUniform();
+
+            yield return null;
+        }
+    }
+
+    IEnumerator FadeInCoroutine(float time)
+    {
         while (true)
         {
             fadeRange += Time.deltaTime / time;

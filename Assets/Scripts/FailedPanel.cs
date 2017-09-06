@@ -15,6 +15,8 @@ public class FailedPanel : MonoBehaviour
     {
         sceneManager = GameObject.FindObjectOfType<MainSceneManager>();
         progressText.text = sceneManager.Progress + "%";
+
+        progressText.GetComponent<TextFade>().FadeIn(0.5f);
     }
 
     public void OnRetryButton()

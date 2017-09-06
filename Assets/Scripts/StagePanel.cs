@@ -43,7 +43,7 @@ public class StagePanel : MonoBehaviour
 
     private void UpdateDisplayInfo()
     {
-        stageNameText.GetComponent<TextFade>().FadeOutIn(0.25f, stageString);
+        stageNameText.GetComponent<TextFade>().FadeAndTextChange(0.25f, stageString);
 
         StopCoinsAnim();
 

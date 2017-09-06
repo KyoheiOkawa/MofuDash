@@ -14,6 +14,9 @@ public class ClearPanel : MonoBehaviour
     [SerializeField]
     Button nextButton;
 
+    [SerializeField]
+    Text clearComment;
+
     MainSceneManager sceneManager;
 
     void Start()
@@ -40,6 +43,8 @@ public class ClearPanel : MonoBehaviour
             if (manager.GetCollectedCoinNum() < nextStageInfo.unlockCoin)
                 nextButton.interactable = false;
         }
+
+        clearComment.GetComponent<TextFade>().FadeIn(0.5f);
     }
 
     public void OnBackButton()

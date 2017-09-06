@@ -109,6 +109,7 @@ GameObject:
   - component: {fileID: 222990772842464468}
   - component: {fileID: 114383491576504390}
   - component: {fileID: 114318747745069874}
+  - component: {fileID: 114142066982676694}
   m_Layer: 5
   m_Name: congratulations
   m_TagString: Untagged
@@ -179,6 +180,20 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114142066982676694
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1713246745319872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f4697c65825943808ebc94676753cd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeRange: 1
+  text: {fileID: 114383491576504390}
+  material: {fileID: 2100000, guid: 706fab877efe54c7cbc956173833a1ab, type: 2}
 --- !u!114 &114156447976718168
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -387,7 +402,7 @@ MonoBehaviour:
   m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 706fab877efe54c7cbc956173833a1ab, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
@@ -534,6 +549,7 @@ MonoBehaviour:
   - {fileID: 114082868346728676}
   coinSprite: {fileID: 21300000, guid: c38749610277c4032b48d74f37e1a7cc, type: 3}
   nextButton: {fileID: 114175257236975870}
+  clearComment: {fileID: 114383491576504390}
 --- !u!114 &114994326657125198
 MonoBehaviour:
   m_ObjectHideFlags: 1
