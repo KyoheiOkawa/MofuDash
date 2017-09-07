@@ -71,6 +71,14 @@ public class MainSceneManager : MonoBehaviour
 
 		SetCatchedCoin ();
 		UpdateCoinChatcedState ();
+
+        Vector3 playerPos = player.transform.position;
+        GameObject stageNameTextPrefab = Resources.Load<GameObject>("Prefabs/StageNameText");
+
+        GameObject stageNameText = Instantiate(stageNameTextPrefab,playerPos,Quaternion.identity);
+
+        Scene currentScene = SceneManager.GetActiveScene();
+        stageNameText.GetComponent<TextMesh>().text = currentScene.name;
     }
 	
 	void Update ()
