@@ -59,20 +59,4 @@ Shader "GUI/StageText Shader" {
 		ENDCG
 	}
 	}
-
-		SubShader{
-		Tags{ "Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent" }
-		Lighting Off Cull Off ZTest Always ZWrite Off Fog{ Mode Off }
-		Blend SrcAlpha OneMinusSrcAlpha
-		BindChannels{
-		Bind "Color", color
-		Bind "Vertex", vertex
-		Bind "TexCoord", texcoord
-	}
-		Pass{
-		SetTexture[_MainTex]{
-		constantColor[_Color] combine constant * primary, constant * texture
-	}
-	}
-	}
 }
