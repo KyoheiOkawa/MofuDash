@@ -67,7 +67,7 @@ public class GameManager
         }
     }
 
-    static int nowStageIndex = 0;
+    static int nowStageIndex = 1;
 
     public int NowStageIndex
     {
