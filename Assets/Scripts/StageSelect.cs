@@ -21,6 +21,7 @@ public class StageSelect : MonoBehaviour
     {
         GameManager manager = GameManager.Instance;
         stageInfo = manager.StageInfo;
+        nowSelected = manager.NowStageIndex;
 
         SetStageInfo();
 
