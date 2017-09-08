@@ -17,6 +17,18 @@ public class BWobject : MonoBehaviour
     [SerializeField]
     protected OwnColor ownColor;
 
+    public OwnColor OwnColor
+    {
+        get
+        {
+            return OwnColor;
+        }
+        set
+        {
+            ownColor = value;
+        }
+    }
+
     [SerializeField]
     private Material blackMaterial;
 
