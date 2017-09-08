@@ -20,9 +20,19 @@ public class CrazyEye : MonoBehaviour
     float fireDistance = 1.0f;
 
     [SerializeField]
-    float lifeTimeAfterFire = 3.0f;
+    float bulletLifeTimeAfterFire = 3.0f;
 
-    bool isFire = false;
+    [SerializeField]
+    OwnColor[] bulletColors = { OwnColor.WHITE };
+
+    /// <summary>
+    /// プレイヤーがfireDistanceより近づいたときに発射する場合true
+    /// プレイヤーがこのオブジェクトを通り過ぎ、fireDistance以上になったら発射する場合false
+    /// </summary>
+    [SerializeField]
+    bool isFireWhenPlayerClosed = true;
+
+    bool isFinishedFire = false;
 
     Animator animator;
 
@@ -33,19 +43,36 @@ public class CrazyEye : MonoBehaviour
 
     void Update()
     {
-        if (isFire)
+        if (isFinishedFire)
             return;
 
         if (target == null)
             return;
 
-        float distance = Mathf.Abs(transform.position.x - target.transform.position.x);
-        if (distance <= fireDistance)
+        bool isFire = JudgeFireDistance();
+
+        if (isFire)
         {
             animator.SetTrigger(openEyeTriggerName);
             FireBullet(bulletSpeed);
-            isFire = true;
+            isFinishedFire = true;
         }
+    }
+
+    bool JudgeFireDistance()
+    {
+        float distance = transform.position.x - target.transform.position.x;
+
+        if (isFireWhenPlayerClosed)
+        {
+            return distance > 0 && Mathf.Abs(distance) <= fireDistance;
+        }
+        else
+        {
+            return distance < 0 && Mathf.Abs(distance) >= fireDistance;
+        }
+
+        return false;
     }
 
     void FireBullet(float speed, int bulletNum = 8)
@@ -60,8 +87,9 @@ public class CrazyEye : MonoBehaviour
 
             GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
             bullet.GetComponent<Rigidbody2D>().velocity = fireVelocity;
+            bullet.GetComponent<BWobject>().OwnColor = bulletColors[i];
 
-            Destroy(bullet, lifeTimeAfterFire);
+            Destroy(bullet, bulletLifeTimeAfterFire);
         }
     }
 
