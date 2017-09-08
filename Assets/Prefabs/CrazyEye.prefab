@@ -21,6 +21,8 @@ GameObject:
   - component: {fileID: 4836096880990250}
   - component: {fileID: 212454730696192414}
   - component: {fileID: 95605942461050752}
+  - component: {fileID: 58247704216291916}
+  - component: {fileID: 114178954220669238}
   - component: {fileID: 114691856554040184}
   m_Layer: 9
   m_Name: CrazyEye
@@ -36,12 +38,27 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1340199855921140}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.577474, y: -1.06875, z: 0}
+  m_LocalPosition: {x: 7.78, y: -2.34, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &58247704216291916
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1340199855921140}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.9075
 --- !u!95 &95605942461050752
 Animator:
   serializedVersion: 3
@@ -59,6 +76,23 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114178954220669238
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1340199855921140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24bf538b82519714b9481a95a567e6ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefabName: Prefabs/Bullet
+  openEyeTriggerName: Open
+  target: {fileID: 0}
+  bulletSpeed: 8
+  fireDistance: 10
+  lifeTimeAfterFire: 2
 --- !u!114 &114691856554040184
 MonoBehaviour:
   m_ObjectHideFlags: 1
