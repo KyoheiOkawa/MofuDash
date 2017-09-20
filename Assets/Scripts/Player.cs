@@ -319,7 +319,7 @@ public class Player : MonoBehaviour
         {
             var hitObject = hitCol.gameObject;
 
-            var acceptLen = ownCol.radius * 2.0f  * 0.75f;
+            var acceptLen = ownCol.radius * 2.0f  * transform.localScale.x;
 
             var len = (hitObject.GetComponent<Transform>().position - transform.position).magnitude;
 
@@ -327,6 +327,7 @@ public class Player : MonoBehaviour
             {
                 //オブジェクトに埋まっているときに色変更しようとしたら×エフェクトを生成
                 Instantiate(Resources.Load("Prefabs/Batsu"), transform.position, Quaternion.identity);
+                SoundManager.Instance.PlaySE("Miss");
 
                 return true;
             }
