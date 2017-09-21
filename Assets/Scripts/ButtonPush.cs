@@ -37,13 +37,27 @@ public class ButtonPush : MonoBehaviour
 
     public void OnPush()
     {
-        m_Trans.localScale = m_DefaultScale * m_PushScale;
-        m_Image.color = m_PushColor;
+        var button = GetComponent<Button>();
+        if (!button)
+            return;
+
+        if (button.interactable)
+        {
+            m_Trans.localScale = m_DefaultScale * m_PushScale;
+            m_Image.color = m_PushColor;
+        }
     }
 
     public void OnUp()
     {
-        m_Trans.localScale = m_DefaultScale;
-        m_Image.color = m_DefaultColor;
+        var button = GetComponent<Button>();
+        if (!button)
+            return;
+
+        if (button.interactable)
+        {
+            m_Trans.localScale = m_DefaultScale;
+            m_Image.color = m_DefaultColor;
+        }
     }
 }

@@ -41,7 +41,9 @@ public class ClearPanel : MonoBehaviour
             var nextStageInfo = stageInfos["Stage" + (nowStage + 1).ToString()];
 
             if (manager.GetCollectedCoinNum() < nextStageInfo.unlockCoin)
+            {
                 nextButton.interactable = false;
+            }
         }
 
         clearComment.GetComponent<TextFade>().FadeIn(0.5f);
