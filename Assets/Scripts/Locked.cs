@@ -21,6 +21,6 @@ public class Locked : MonoBehaviour
 
     public void SetUnlockInfoText(int coinNum)
     {
-        unlockHintComment.text = string.Format("コイン{0,2}枚で開錠", coinNum);
+        unlockHintComment.text = string.Format("コイン\n{0,2}枚で開錠", coinNum);
     }
 }
